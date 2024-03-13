@@ -1,0 +1,32 @@
+{
+  "name": "twitter-snap-core",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev:example": "npx tsx example/text.ts && npx tsx example/video.ts",
+    "dev:style": "next dev",
+    "start": "node dist/cli.js",
+    "build": "npx tsc -p tsconfig.build.json"
+  },
+  "bin": {
+    "twitter-snap": "dist/cli.js"
+  },
+  "dependencies": {
+    "fluent-ffmpeg": "^2.1.2",
+    "graphemesplit": "^2.4.4",
+    "react": "^18.2.0",
+    "twitter-openapi-typescript": "<2.0.0"
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.24",
+    "@types/node": "^20.11.25",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@vercel/og": "^0.6.2",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.3",
+    "next": "14.1.3",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.4.2"
+  }
+}

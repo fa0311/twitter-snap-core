@@ -1,0 +1,8 @@
+/.next
+/node_modules
+/dist
+/src/assets/*
+/output.png
+/public/sample
+temp/*
+cookies.txt
