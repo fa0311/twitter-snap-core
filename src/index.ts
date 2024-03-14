@@ -1,4 +1,4 @@
-export * from './infrastructure/ffmpeg';
-export * from './render';
-export * from './utils/utils';
+export * from './infrastructure/ffmpeg.js';
+export * from './render/index.js';
+export * from './utils/utils.js';
 

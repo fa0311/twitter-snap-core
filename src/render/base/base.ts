@@ -1,5 +1,5 @@
-import { TweetImageRenderType, TweetRenderImage } from "./image";
-import { TweetRenderVideo, TweetVideoRenderType } from "./video";
+import { TweetImageRenderType, TweetRenderImage } from "./image.js";
+import { TweetRenderVideo, TweetVideoRenderType } from "./video.js";
 
 
 export type TweetRenderMerge<T> = {

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { TweetApiUtilsData } from "twitter-openapi-typescript";
-import { RenderBasicImage } from "../render/basic/image";
+import { RenderBasicImage } from "../render/basic/image.js";
 
 export default function Home() {
   const toAPi = (e: string) => `/api/twitter?id=${e}`;

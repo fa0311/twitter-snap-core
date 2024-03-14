@@ -1,9 +1,9 @@
-export * from './base/base';
-export * from './base/image';
-export * from './base/video';
+export * from './base/base.js';
+export * from './base/image.js';
+export * from './base/video.js';
 
-export * from './basic/basic';
-export * from './basic/image';
-export * from './basic/video';
+export * from './basic/basic.js';
+export * from './basic/image.js';
+export * from './basic/video.js';
 
 

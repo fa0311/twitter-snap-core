@@ -1,6 +1,6 @@
-import { FFmpegInfrastructure } from "infrastructure/ffmpeg";
-import { TweetRenderVideo, TweetVideoRenderType } from "render/base/video";
-import { getBiggerMedia, getResizedMediaByWidth } from "utils/utils";
+import { FFmpegInfrastructure } from "../../infrastructure/ffmpeg.js";
+import { TweetRenderVideo, TweetVideoRenderType } from "../../render/base/video.js";
+import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils.js";
 
 export type RenderBasicVideoParam = {
     ffmpeg?: FFmpegInfrastructure;

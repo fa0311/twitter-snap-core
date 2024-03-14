@@ -1,6 +1,6 @@
 {
   "name": "twitter-snap-core",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "type": "module",
   "scripts": {
     "dev:example": "npx tsx example/text.ts && npx tsx example/video.ts",

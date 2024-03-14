@@ -1,5 +1,5 @@
-import { FFmpegInfrastructure } from "infrastructure/ffmpeg";
 import { TweetApiUtilsData } from "twitter-openapi-typescript";
+import { FFmpegInfrastructure } from "../../infrastructure/ffmpeg.js";
 
 export type TweetVideoRenderType = (props: {
     data: TweetApiUtilsData,
