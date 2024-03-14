@@ -14,12 +14,8 @@ export class FFmpegInfrastructure {
     }
 
     dumpFFmpeg: DumpFFmpegType = (command) => {
-        console.log(
-            command
-                ._getArguments()
-                .map((e) => `"${e}"`)
-                .join(" ")
-        );
+        const c = `ffmpeg ${command._getArguments().map((e) => `"${e}"`).join(" ")}`
+        console.log(c);
     };
 
     runMpeg: RunFFmpegType = (command) => {
