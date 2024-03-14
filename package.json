@@ -1,6 +1,6 @@
 {
   "name": "twitter-snap-core",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev:example": "npx tsx example/text.ts && npx tsx example/video.ts",
@@ -11,6 +11,8 @@
   "bin": {
     "twitter-snap": "dist/cli.js"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "fluent-ffmpeg": "^2.1.2",
     "graphemesplit": "^2.4.4",
