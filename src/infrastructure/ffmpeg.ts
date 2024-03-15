@@ -1,6 +1,6 @@
 import { default as ffmpeg, default as ffprobe } from "fluent-ffmpeg";
 export type GetFFmpegType = () => ffmpeg.FfmpegCommand;
-export type DumpFFmpegType = (command: ffmpeg.FfmpegCommand) => void;
+export type DumpCommandType = (prefix: string, command: ffmpeg.FfmpegCommand) => void;
 export type RunFFmpegType = (command: ffmpeg.FfmpegCommand) => Promise<unknown>;
 export type RunFFprobeType = (command: ffprobe.FfmpegCommand) => Promise<ffmpeg.FfprobeData>;
 
@@ -13,13 +13,13 @@ export class FFmpegInfrastructure {
         return ffprobe();
     }
 
-    dumpFFmpeg: DumpFFmpegType = (command) => {
-        const c = `ffmpeg ${command._getArguments().map((e) => `"${e}"`).join(" ")}`
+    dumpCommand: DumpCommandType = (prefix, command) => {
+        const c = `${prefix} ${command._getArguments().map((e) => `"${e}"`).join(" ")}`
         console.log(c);
     };
 
     runMpeg: RunFFmpegType = (command) => {
-        this.dumpFFmpeg(command);
+        this.dumpCommand("ffmpeg", command);
         return new Promise((resolve, reject) => {
             command.on("end", resolve);
             command.on("error", reject);
@@ -28,7 +28,7 @@ export class FFmpegInfrastructure {
     };
 
     runProbe: RunFFprobeType = (command) => {
-        this.dumpFFmpeg(command);
+        this.dumpCommand("ffprobe", command);
         return new Promise((resolve, reject) => {
             command.ffprobe((err, data) => {
                 if (err) reject(err);
