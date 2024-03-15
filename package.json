@@ -1,6 +1,6 @@
 {
   "name": "twitter-snap-core",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "type": "module",
   "scripts": {
     "dev:example": "npx tsx example/text.ts && npx tsx example/video.ts",
@@ -17,7 +17,8 @@
     "fluent-ffmpeg": "^2.1.2",
     "graphemesplit": "^2.4.4",
     "react": "^18.2.0",
-    "twitter-openapi-typescript": "<2.0.0"
+    "twitter-openapi-typescript": "<2.0.0",
+    "twitter-openapi-typescript-generated": "*"
   },
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.24",
