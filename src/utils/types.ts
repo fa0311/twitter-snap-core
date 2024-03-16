@@ -1,4 +1,4 @@
-import { RenderBasic } from '../render/basic/basic.js'
+import { RenderBasic } from "../render/basic/basic"
 
 export const themeList = { RenderBasic } as const
 

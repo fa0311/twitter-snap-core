@@ -1,6 +1,6 @@
-import { TweetRender, TweetRenderMerge } from "../base/base.js";
-import { RenderBasicImage, RenderBasicImageParam } from "./image.js";
-import { RenderBasicVideo, RenderBasicVideoParam } from "./video.js";
+import { TweetRender, TweetRenderMerge } from "../base/base";
+import { RenderBasicImage, RenderBasicImageParam } from "./image";
+import { RenderBasicVideo, RenderBasicVideoParam } from "./video";
 
 
 

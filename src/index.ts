@@ -1,5 +1,5 @@
-export * from './infrastructure/ffmpeg.js';
-export * from './render/index.js';
-export * from './utils/types.js';
-export * from './utils/utils.js';
+export * from "./infrastructure/ffmpeg"
+export * from "./render/index"
+export * from "./utils/types"
+export * from "./utils/utils"
 

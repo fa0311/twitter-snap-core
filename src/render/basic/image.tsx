@@ -1,8 +1,8 @@
 import split from "graphemesplit";
 import React from "react";
 import { NoteTweetResultRichTextTagRichtextTypesEnum as RichtextTypesEnum } from "twitter-openapi-typescript-generated";
-import { TweetImageRenderType, TweetRenderImage } from "../../render/base/image.js";
-import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils.js";
+import { TweetImageRenderType, TweetRenderImage } from "../../render/base/image";
+import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils";
 
 export type RenderBasicImageParam = {
     width: number;
