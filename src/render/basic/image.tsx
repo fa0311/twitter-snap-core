@@ -12,6 +12,8 @@ export type RenderBasicImageParam = {
 export class RenderBasicImage extends TweetRenderImage {
     width: NonNullable<RenderBasicImageParam["width"]>;
     video: NonNullable<RenderBasicImageParam["video"]>;
+    margin: number = 20;
+    padding: number = 12;
 
     constructor(props: RenderBasicImageParam) {
         super();
@@ -34,7 +36,7 @@ export class RenderBasicImage extends TweetRenderImage {
                     alignItems: "center",
                     width: "100%",
                     height: "100%",
-                    padding: 20,
+                    padding: this.margin,
                     background:
                         "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
                 }}
@@ -46,7 +48,7 @@ export class RenderBasicImage extends TweetRenderImage {
                         display: "flex",
                         flexDirection: "column",
                         borderRadius: "10px",
-                        padding: "12px",
+                        padding: this.padding,
                     }}
                 >
                     <div

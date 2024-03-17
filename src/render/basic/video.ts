@@ -6,16 +6,21 @@ export type RenderBasicVideoParam = {
     ffmpeg?: FFmpegInfrastructure;
     width: number;
     video?: boolean;
+    ffmpegAdditonalOption?: string[];
 };
 
 export class RenderBasicVideo extends TweetRenderVideo {
     width: NonNullable<RenderBasicVideoParam["width"]>;
     video: NonNullable<RenderBasicVideoParam["video"]>;
+    margin: number = 20;
+    padding: number = 12;
+    ffmpegAdditonalOption: NonNullable<RenderBasicVideoParam["ffmpegAdditonalOption"]>;
 
     constructor(props: RenderBasicVideoParam) {
         super(props.ffmpeg);
         this.width = props.width;
         this.video = props.video ?? false;
+        this.ffmpegAdditonalOption = props.ffmpegAdditonalOption ?? [];
     }
 
     render: TweetVideoRenderType = async ({ data, image, output }) => {
@@ -46,7 +51,7 @@ export class RenderBasicVideo extends TweetRenderVideo {
         const { width, height } = getResizedMediaByWidth(
             blank!.videoInfo!.aspectRatio[0],
             blank!.videoInfo!.aspectRatio[1],
-            this.width - (20 + 12) * 2
+            this.width - (this.margin + this.padding) * 2
         );
 
         const res = video.map(async ({ url }, i) => {
@@ -115,7 +120,7 @@ export class RenderBasicVideo extends TweetRenderVideo {
                 video.map((_, i) => `[${i + 1}]scale=${width}:${height}${pad(i)}`),
                 `${all("v")}concat=n=${video.length}:v=1:a=0[video]`,
                 `${all("a")}concat=n=${video.length}:v=0:a=1[audio]`,
-                `[i][video]overlay=30:H-${height + 20 + 12}[marge]`,
+                `[i][video]overlay=30:H-${height + (this.margin + this.padding)}[marge]`,
             ].flat()
         );
         command.map("[marge]");
@@ -124,6 +129,11 @@ export class RenderBasicVideo extends TweetRenderVideo {
 
         command.addOption("-metadata", `title=${title}`);
         command.addOption("-metadata", `comment=${comment}`);
+
+        for (const option of this.ffmpegAdditonalOption) {
+            command.addOption(option);
+        }
+
         command.output(output);
         await this.ffmpeg.runMpeg(command);
 
