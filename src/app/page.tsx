@@ -19,6 +19,7 @@ export default function Home() {
 
   const [state, setState] = useState<TweetApiUtilsData | null>(null);
   const [id, setId] = useState("1518623997054918657");
+  const [reload, setReload] = useState(0);
   const [theme, setTheme] = useState<string>(Object.keys(themeList)[0]);
 
 
@@ -30,11 +31,12 @@ export default function Home() {
     fetch(toAPi(toId(id)))
       .then((e) => e.json())
       .then((e) => setState(e.data));
-  }, [id]);
+  }, [id, reload]);
 
 
   return (
     <>
+      <button onClick={() => setReload((e) => e + 1)}>reload</button>
       <input value={id} onChange={(e) => setId(e.target.value)} />
       <select value={theme} onChange={(e) => setTheme(e.target.value)}>
         {

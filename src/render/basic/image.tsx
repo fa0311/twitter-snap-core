@@ -1,17 +1,22 @@
 import split from "graphemesplit";
 import React from "react";
-import { NoteTweetResultRichTextTagRichtextTypesEnum as RichtextTypesEnum } from "twitter-openapi-typescript-generated";
+import {
+    NoteTweetResultRichTextTagRichtextTypesEnum as RichtextTypesEnum,
+    type UserProfileImageShapeEnum
+} from "twitter-openapi-typescript-generated";
 import { TweetImageRenderType, TweetRenderImage } from "../../render/base/image";
 import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils";
 
 export type RenderBasicImageParam = {
     width: number;
     video?: boolean;
+    background?: string;
 };
 
 export class RenderBasicImage extends TweetRenderImage {
     width: NonNullable<RenderBasicImageParam["width"]>;
     video: NonNullable<RenderBasicImageParam["video"]>;
+    background: NonNullable<RenderBasicImageParam["background"]>;
     margin: number = 20;
     padding: number = 12;
 
@@ -19,14 +24,60 @@ export class RenderBasicImage extends TweetRenderImage {
         super();
         this.width = props.width;
         this.video = props.video ?? false;
+        this.background = props.background ?? "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)";
     }
 
-    render: TweetImageRenderType = ({ data }) => {
-        const icon = data.user.legacy.profileImageUrlHttps;
-        const name = data.user.legacy.name;
-        const id = data.user.legacy.screenName;
-        const lang = data.tweet.legacy!.lang;
+    getBadge: TweetImageRenderType = ({ data }) => {
+        if (data.user.legacy.verifiedType === "Business") {
+            return (<img
+                style={{ width: "13px", height: "13px" }}
+                src="https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gold-badge.png"
+            />)
+        } else if (data.user.legacy.verifiedType === "Government") {
+            return (
+                <img
+                    style={{ width: "13px", height: "13px" }}
+                    src="https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gray-badge.png"
+                />
+            )
+        } else {
+            return (
+                <img
+                    style={{ width: "13px", height: "13px" }}
+                    src="https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/blue-badge.png"
+                />
+            )
+        }
+    }
 
+
+    getIconShape: ((props: { type: UserProfileImageShapeEnum }) => React.CSSProperties) = ({ type }) => {
+        switch (type) {
+            case "Square": {
+                return {
+                    borderRadius: "4px",
+                }
+            }
+            case "Circle": {
+                return {
+                    borderRadius: "50%",
+                }
+            }
+            case "Hexagon": {
+                return {
+                    borderRadius: "50%",
+                    clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+                }
+            }
+        }
+    }
+
+
+    render: TweetImageRenderType = ({ data }) => {
+        const thumbnail = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "thumbnail_image_original")?.value;
+
+        const lang = data.tweet.legacy!.lang
+        const k = data.user.legacy.hasCustomTimelines
         return (
             <div
                 lang={lang}
@@ -37,8 +88,7 @@ export class RenderBasicImage extends TweetRenderImage {
                     width: "100%",
                     height: "100%",
                     padding: this.margin,
-                    background:
-                        "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
+                    background: this.background,
                 }}
             >
                 <div
@@ -49,54 +99,145 @@ export class RenderBasicImage extends TweetRenderImage {
                         flexDirection: "column",
                         borderRadius: "10px",
                         padding: this.padding,
+                        gap: "12px",
                     }}
                 >
-                    <div
-                        style={{
-                            display: "flex",
-                        }}
-                    >
+                    <this.userRender data={data} />
+                    {thumbnail?.imageValue?.url && (
                         <img
-                            alt="icon"
                             style={{
-                                width: "40px",
-                                height: "40px",
-                                borderRadius: "50%",
-                                marginRight: "12px",
+                                width: "100%",
+                                borderRadius: "10px",
+                                border: "1px solid #e6e6e6",
+
                             }}
-                            src={icon}
+                            src={thumbnail?.imageValue?.url}
                         />
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                            }}
-                        >
-                            <p
-                                style={{
-                                    fontSize: "15px",
-                                    fontWeight: "700",
-                                    margin: "0px",
-                                }}
-                            >
-                                {name}
-                            </p>
-                            <p
-                                style={{
-                                    fontSize: "15px",
-                                    margin: "0px",
-                                    color: "#536471",
-                                }}
-                            >
-                                @{id}
-                            </p>
-                        </div>
-                    </div>
-                    <this.tweetRender data={data} />
+                    )}
                 </div>
             </div>
         );
     };
+
+
+    username: TweetImageRenderType = ({ data }) => {
+        const name = data.user.legacy.name;
+        const label = data.user.affiliatesHighlightedLabel?.label?.badge?.url;
+        return (
+            <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px"
+            }}>
+                <p
+                    style={{
+                        fontSize: "15px",
+                        fontWeight: "700",
+                        margin: "0px",
+                    }}
+                >
+                    {name}
+                </p>
+                {(data.user.isBlueVerified || data.user.legacy.verified) && this.getBadge({ data })}
+                {label && (
+                    <img
+                        style={{ width: "13px", height: "13px", border: "1px solid #e6e6e6" }}
+                        src={label}
+                    />
+                )
+                }
+            </div>
+        )
+    }
+
+    userRender: TweetImageRenderType = ({ data }) => {
+        const icon = data.user.legacy.profileImageUrlHttps;
+        const name = data.user.legacy.name;
+        const id = data.user.legacy.screenName;
+
+        return (
+            <div style={{ display: "flex", gap: "12px", flexDirection: "column" }}>
+                <div style={{ display: "flex", gap: "12px" }}>
+                    <img
+                        alt="icon"
+                        style={{
+                            width: "40px",
+                            height: "40px",
+                            ...this.getIconShape({ type: data.user.profileImageShape })
+                        }}
+                        src={icon}
+                    />
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        {this.username({ data })}
+                        <p
+                            style={{
+                                fontSize: "15px",
+                                margin: "0px",
+                                color: "#536471",
+                            }}
+                        >
+                            @{id}
+                        </p>
+                    </div>
+                </div>
+                <this.tweetRender data={data} />
+                {data.quoted && (
+                    <div style={{ border: "1px solid #e6e6e6", borderRadius: "10px", padding: "12px", display: "flex" }}>
+                        <this.quotedRender data={data.quoted} />
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+
+
+    quotedRender: TweetImageRenderType = ({ data }) => {
+        const icon = data.user.legacy.profileImageUrlHttps;
+        const name = data.user.legacy.name;
+        const id = data.user.legacy.screenName;
+        return (
+            <div style={{ display: "flex", gap: "2px", flexDirection: "column" }}>
+                <div style={{ display: "flex", gap: "2px" }}>
+                    <img
+                        alt="icon"
+                        style={{
+                            width: "24px",
+                            height: "24px",
+                            ...this.getIconShape({ type: data.user.profileImageShape })
+                        }}
+                        src={icon}
+                    />
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px"
+                        }}
+                    >
+                        {this.username({ data })}
+                        <p
+                            style={{
+                                fontSize: "15px",
+                                margin: "0px",
+                                color: "#536471",
+                            }}
+                        >
+                            @{id}
+                        </p>
+                    </div>
+                </div>
+                <div style={{
+                    marginTop: "6px",
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+                    <this.tweetRender data={data} />
+                </div>
+            </div>
+        );
+    }
+
 
     tweetRender: TweetImageRenderType = ({ data }) => {
         const note = data.tweet.noteTweet?.noteTweetResults.result;
@@ -285,6 +426,7 @@ export class RenderBasicImage extends TweetRenderImage {
                     <div
                         key={"biggerMedia"}
                         style={{
+                            display: "flex",
                             width: resizedMedia.width,
                             height: resizedMedia.height,
                         }}
@@ -410,7 +552,6 @@ export class RenderBasicImage extends TweetRenderImage {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    marginTop: "12px",
                 }}
             >
                 {textElement}
