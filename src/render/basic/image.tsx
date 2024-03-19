@@ -182,7 +182,7 @@ export class RenderBasicImage extends TweetRenderImage {
                 </div>
                 <this.tweetRender data={data} />
                 {data.quoted && (
-                    <div style={{ border: "1px solid #e6e6e6", borderRadius: "10px", padding: "12px", display: "flex" }}>
+                    <div style={{ border: "1px solid #e6e6e6", borderRadius: "16px", padding: "12px", display: "flex" }}>
                         <this.quotedRender data={data.quoted} />
                     </div>
                 )}
@@ -197,13 +197,14 @@ export class RenderBasicImage extends TweetRenderImage {
         const name = data.user.legacy.name;
         const id = data.user.legacy.screenName;
         return (
-            <div style={{ display: "flex", gap: "2px", flexDirection: "column" }}>
-                <div style={{ display: "flex", gap: "2px" }}>
+            <div style={{ display: "flex", gap: "12px", flexDirection: "column" }}>
+                <div style={{ display: "flex", gap: "12px" }}>
                     <img
                         alt="icon"
                         style={{
                             width: "24px",
                             height: "24px",
+                            margin: "4px",
                             ...this.getIconShape({ type: data.user.profileImageShape })
                         }}
                         src={icon}
@@ -228,7 +229,6 @@ export class RenderBasicImage extends TweetRenderImage {
                     </div>
                 </div>
                 <div style={{
-                    marginTop: "6px",
                     display: "flex",
                     flexDirection: "column",
                 }}>
@@ -460,17 +460,17 @@ export class RenderBasicImage extends TweetRenderImage {
                 ({ start, end, type }) =>
                     start <= index && index < end && type.includes(RichtextTypesEnum.Italic)
             );
-
+            const properties: React.CSSProperties = {
+                ...(link ? { color: "#1d9bf0" } : {}),
+                ...(bold ? { fontWeight: "700" } : {}),
+                ...(italic ? { fontStyle: "italic" } : {}),
+            };
             return {
                 char: char,
                 index: index,
-                properties: {
-                    ...(link ? { color: "#1d9bf0" } : {}),
-                    ...(bold ? { fontWeight: "700" } : {}),
-                    ...(italic ? { italic: "italic" } : {}),
-                },
+                properties: properties,
             };
-        }, [] as { char: string; properties: React.CSSProperties }[]);
+        });
 
         const textDataList: {
             start: number;
@@ -510,7 +510,7 @@ export class RenderBasicImage extends TweetRenderImage {
                 <p
                     key={i}
                     style={{
-                        fontSize: "17px",
+                        fontSize: "17px", // or 14px 
                         margin: "0px",
                         width: "100%",
                         display: "flex",
