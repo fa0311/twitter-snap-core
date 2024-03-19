@@ -28,26 +28,23 @@ export class RenderBasicImage extends TweetRenderImage {
     }
 
     getBadge: TweetImageRenderType = ({ data }) => {
-        if (data.user.legacy.verifiedType === "Business") {
-            return (<img
-                style={{ width: "13px", height: "13px" }}
-                src="https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gold-badge.png"
-            />)
-        } else if (data.user.legacy.verifiedType === "Government") {
-            return (
-                <img
-                    style={{ width: "13px", height: "13px" }}
-                    src="https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gray-badge.png"
-                />
-            )
-        } else {
-            return (
-                <img
-                    style={{ width: "13px", height: "13px" }}
-                    src="https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/blue-badge.png"
-                />
-            )
-        }
+        const src = (() => {
+            if (data.user.legacy.verifiedType === "Business") {
+                return "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gold-badge.png"
+            } else if (data.user.legacy.verifiedType === "Government") {
+                return "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gray-badge.png"
+            } else {
+                return "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/blue-badge.png"
+            }
+        })();
+        return (
+            <img
+                style={{
+                    width: "15px", height: "15px", marginTop: "4px"
+                }}
+                src={src}
+            />
+        )
     }
 
 
@@ -126,14 +123,13 @@ export class RenderBasicImage extends TweetRenderImage {
         return (
             <div style={{
                 display: "flex",
-                alignItems: "center",
-                gap: "6px"
+                gap: "4px",
             }}>
                 <p
                     style={{
+                        margin: "0px",
                         fontSize: "15px",
                         fontWeight: "700",
-                        margin: "0px",
                     }}
                 >
                     {name}
@@ -141,7 +137,12 @@ export class RenderBasicImage extends TweetRenderImage {
                 {(data.user.isBlueVerified || data.user.legacy.verified) && this.getBadge({ data })}
                 {label && (
                     <img
-                        style={{ width: "13px", height: "13px", border: "1px solid #e6e6e6" }}
+                        style={{
+                            width: "15px",
+                            height: "15px",
+                            border: "1px solid #e6e6e6",
+                            marginTop: "4px",
+                        }}
                         src={label}
                     />
                 )
@@ -156,13 +157,14 @@ export class RenderBasicImage extends TweetRenderImage {
         const id = data.user.legacy.screenName;
 
         return (
-            <div style={{ display: "flex", gap: "12px", flexDirection: "column" }}>
-                <div style={{ display: "flex", gap: "12px" }}>
+            <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
+                <div style={{ display: "flex", gap: "2px", alignItems: "center" }}>
                     <img
                         alt="icon"
                         style={{
                             width: "40px",
                             height: "40px",
+                            margin: "4px",
                             ...this.getIconShape({ type: data.user.profileImageShape })
                         }}
                         src={icon}
@@ -170,11 +172,7 @@ export class RenderBasicImage extends TweetRenderImage {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         {this.username({ data })}
                         <p
-                            style={{
-                                fontSize: "15px",
-                                margin: "0px",
-                                color: "#536471",
-                            }}
+                            style={{ fontSize: "15px", margin: "0px", color: "#536471" }}
                         >
                             @{id}
                         </p>
@@ -182,7 +180,7 @@ export class RenderBasicImage extends TweetRenderImage {
                 </div>
                 <this.tweetRender data={data} />
                 {data.quoted && (
-                    <div style={{ border: "1px solid #e6e6e6", borderRadius: "16px", padding: "12px", display: "flex" }}>
+                    <div style={{ border: "1px solid #e6e6e6", borderRadius: "16px", padding: "10px", display: "flex" }}>
                         <this.quotedRender data={data.quoted} />
                     </div>
                 )}
@@ -197,8 +195,8 @@ export class RenderBasicImage extends TweetRenderImage {
         const name = data.user.legacy.name;
         const id = data.user.legacy.screenName;
         return (
-            <div style={{ display: "flex", gap: "12px", flexDirection: "column" }}>
-                <div style={{ display: "flex", gap: "12px" }}>
+            <div style={{ display: "flex", gap: "2px", flexDirection: "column" }}>
+                <div style={{ display: "flex", gap: "2px" }}>
                     <img
                         alt="icon"
                         style={{
@@ -398,6 +396,7 @@ export class RenderBasicImage extends TweetRenderImage {
                                 width: "100%",
                                 borderRadius: "10px",
                                 border: "1px solid #e6e6e6",
+                                marginTop: "12px",
                             }}
                             src={m.mediaUrlHttps}
                         />
