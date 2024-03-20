@@ -4,8 +4,6 @@ import { TwitterOpenApi } from "twitter-openapi-typescript";
 import { ThemeKeyType } from "app/component/twitter/settings";
 import { TweetRenderImage } from "render";
 
-
-
 const themeList: Record<ThemeKeyType, TweetRenderImage> = {
   "video-false": new RenderBasicImage({ width: 600, video: false }),
   "video-true": new RenderBasicImage({ width: 600, video: true }),
@@ -29,7 +27,6 @@ export const TwitterJSX = async ({ tweetId, theme }: Props) => {
   if (tweet.data === undefined) {
     return <div>tweet.data is undefined</div>;
   }
-
   return (
     <div
       style={{

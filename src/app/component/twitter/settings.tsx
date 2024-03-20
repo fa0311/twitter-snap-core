@@ -12,12 +12,10 @@ type TwitterJSXProps = Parameters<typeof TwitterJSX>[0];
 export const TwitterSettings = ({ tweetId, theme }: TwitterJSXProps) => {
     const [id, setId] = useState(tweetId);
     const [selectedTheme, setTheme] = useState(theme);
-
     const getURL = () => {
-        const url = new URL(window.location.href);
-        url.pathname = `/${id}`
-        url.searchParams.set("theme", selectedTheme);
-        return url.href;
+        const param = new URLSearchParams();
+        param.append("theme", selectedTheme);
+        return `/${id}?${param.toString()}`;
     }
 
     return (
