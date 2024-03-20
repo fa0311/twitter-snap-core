@@ -1,21 +1,46 @@
-import { NextRequest } from "next/server";
+import { RenderBasicImage } from "render/basic/image";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
+
+import { ThemeKeyType } from "app/component/twitter/settings";
+import { TweetRenderImage } from "render";
+
+
+
+const themeList: Record<ThemeKeyType, TweetRenderImage> = {
+  "video-false": new RenderBasicImage({ width: 600, video: false }),
+  "video-true": new RenderBasicImage({ width: 600, video: true }),
+};
 
 const guest = new TwitterOpenApi().getGuestClient();
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
+type Props = {
+  tweetId: string;
+  theme: ThemeKeyType;
+};
+
+export const TwitterJSX = async ({ tweetId, theme }: Props) => {
   const client = await guest;
-  if (!id) {
-    return new Response("Missing id", { status: 400 });
-  }
   const tweet = await client.getDefaultApi().getTweetResultByRestId({
-    tweetId: id,
+    tweetId: tweetId,
   });
-  return new Response(JSON.stringify(tweet), {
-    headers: {
-      "content-type": "application/json",
-    },
-  });
+
+  const render = themeList[theme];
+
+  if (tweet.data === undefined) {
+    return <div>tweet.data is undefined</div>;
+  }
+
+  return (
+    <div
+      style={{
+        width: "600px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <render.render data={tweet.data} />
+    </div>
+  )
 }
+

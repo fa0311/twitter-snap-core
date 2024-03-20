@@ -71,13 +71,10 @@ export class RenderBasicImage extends TweetRenderImage {
 
 
     render: TweetImageRenderType = ({ data }) => {
-        const thumbnail = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "thumbnail_image_original")?.value;
-
-        const lang = data.tweet.legacy!.lang
-        const k = data.user.legacy.hasCustomTimelines
+        const thumbnail = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "thumbnail_image_original")?.value.imageValue;
+        const title = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "title")?.value.stringValue;
         return (
             <div
-                lang={lang}
                 style={{
                     display: "flex",
                     justifyContent: "center",
@@ -100,17 +97,32 @@ export class RenderBasicImage extends TweetRenderImage {
                     }}
                 >
                     <this.userRender data={data} />
-                    {thumbnail?.imageValue?.url && (
-                        <img
-                            style={{
-                                width: "100%",
-                                borderRadius: "10px",
-                                border: "1px solid #e6e6e6",
+                    {thumbnail?.url && (
+                        <div style={{ width: "100%", height: "100%", display: "flex", position: "relative" }}>
+                            <img
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    borderRadius: "10px",
+                                    border: "1px solid #e6e6e6",
 
-                            }}
-                            src={thumbnail?.imageValue?.url}
-                        />
+                                }}
+                                src={thumbnail?.url}
+                            />
+                            <p style={{
+                                fontSize: "13px",
+                                position: "absolute",
+                                margin: "0px",
+                                bottom: "12px",
+                                left: "12px",
+                                padding: "0px 4px",
+                                background: "rgba(0, 0, 0, 0.77)",
+                                color: "white",
+                                borderRadius: "4px",
+                            }}>{title}</p>
+                        </div>
                     )}
+
                 </div>
             </div>
         );
