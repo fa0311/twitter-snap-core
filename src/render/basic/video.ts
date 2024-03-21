@@ -120,7 +120,7 @@ export class RenderBasicVideo extends TweetRenderVideo {
                 video.map((_, i) => `[${i + 1}]scale=${width}:${height}${pad(i)}`),
                 `${all("v")}concat=n=${video.length}:v=1:a=0[video]`,
                 `${all("a")}concat=n=${video.length}:v=0:a=1[audio]`,
-                `[i][video]overlay=30:H-${height + (this.margin + this.padding)}[marge]`,
+                `[i][video]overlay=30:H-${height + (this.margin + this.padding) + 31}[marge]`,
             ].flat()
         );
         command.map("[marge]");

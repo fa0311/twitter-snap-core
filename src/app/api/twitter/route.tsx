@@ -2,7 +2,7 @@ import { RenderBasicImage } from "render/basic/image";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
 
 import { ThemeKeyType } from "app/component/twitter/settings";
-import { TweetRenderImage } from "render";
+import { TweetRenderImage } from "render/base/image";
 
 const themeList: Record<ThemeKeyType, TweetRenderImage> = {
   "video-false": new RenderBasicImage({ width: 600, video: false }),
@@ -10,6 +10,8 @@ const themeList: Record<ThemeKeyType, TweetRenderImage> = {
 };
 
 const guest = new TwitterOpenApi().getGuestClient();
+
+TweetRenderImage.window = true;
 
 type Props = {
   tweetId: string;

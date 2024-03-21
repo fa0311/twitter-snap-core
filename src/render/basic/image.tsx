@@ -69,10 +69,44 @@ export class RenderBasicImage extends TweetRenderImage {
         }
     }
 
+    textOverFlow: ((props: { lineClamp: number }) => React.CSSProperties) = ({ lineClamp }) => {
+        return {
+            display: this.window ? "-webkit-box" : "block",
+            WebkitLineClamp: lineClamp,
+            lineClamp: lineClamp,
+            WebkitBoxOrient: "vertical",
+            overflow: 'hidden',
+        }
+    }
+
+
+
+    toKMB: ((num: number) => string) = (num) => {
+        if (num < 1000) {
+            return num.toString();
+        } else if (num < 1000000) {
+            return (num / 1000).toFixed(1) + "K";
+        } else {
+            return (num / 1000000).toFixed(1) + "M";
+        }
+    }
+
 
     render: TweetImageRenderType = ({ data }) => {
-        const thumbnail = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "thumbnail_image_original")?.value.imageValue;
-        const title = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "title")?.value.stringValue;
+        const time = data.tweet.legacy!.createdAt;
+        const timeString = new Date(time).toLocaleString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+
+        const dateString = new Date(time).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+
+        const view = data.tweet.views?.count;
         return (
             <div
                 style={{
@@ -97,36 +131,141 @@ export class RenderBasicImage extends TweetRenderImage {
                     }}
                 >
                     <this.userRender data={data} />
-                    {thumbnail?.url && (
-                        <div style={{ width: "100%", height: "100%", display: "flex", position: "relative" }}>
-                            <img
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    borderRadius: "10px",
-                                    border: "1px solid #e6e6e6",
-
-                                }}
-                                src={thumbnail?.url}
-                            />
-                            <p style={{
-                                fontSize: "13px",
-                                position: "absolute",
-                                margin: "0px",
-                                bottom: "12px",
-                                left: "12px",
-                                padding: "0px 4px",
-                                background: "rgba(0, 0, 0, 0.77)",
-                                color: "white",
-                                borderRadius: "4px",
-                            }}>{title}</p>
-                        </div>
+                    {data.tweet.card && (
+                        <this.ogp data={data} />
                     )}
-
+                    <p style={{ display: "flex", margin: "0px", gap: "2px" }}>
+                        <span style={{ color: "#536471", fontSize: "15px" }}>
+                            {timeString}
+                        </span>
+                        <span style={{ color: "#536471", fontSize: "15px" }}>·</span>
+                        <span style={{ color: "#536471", fontSize: "15px" }}>
+                            {dateString}
+                        </span>
+                        {view && (
+                            <>
+                                <span style={{ color: "#536471", fontSize: "15px" }}>·</span>
+                                <span style={{ color: "#536471", fontSize: "15px", fontWeight: "700" }}>{this.toKMB(Number(view))}</span>
+                                <span style={{ color: "#536471", fontSize: "15px" }}></span>
+                                <span style={{ color: "#536471", fontSize: "15px" }}>Views</span>
+                            </>
+                        )}
+                    </p>
                 </div>
             </div>
         );
     };
+
+
+    ogp: TweetImageRenderType = ({ data }) => {
+        const thumbnail = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "thumbnail_image_original")?.value.imageValue;
+        const summary = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "summary_photo_image_original")?.value.imageValue;
+        const player = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "player_image_large")?.value.imageValue;
+        const title = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "title")?.value.stringValue;
+        const domain = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "domain")?.value.stringValue;
+        const vanityUrl = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "vanity_url")?.value.stringValue;
+        const description = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "description")?.value.stringValue;
+
+
+        data.tweet.card?.legacy?.bindingValues.forEach((v) => {
+            console.log(v.key, v.value);
+        });
+
+        if (player || thumbnail) {
+            const size = 129;
+            const url = player?.url ?? thumbnail?.url;
+
+            return (
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    borderRadius: "10px",
+                    border: "1px solid rgb(207, 217, 222)"
+                }}>
+                    <img
+                        style={{
+                            width: size,
+                            height: size,
+                            borderRadius: "10px 0px 0px 10px",
+                            objectFit: "cover",
+                            borderRight: "1px solid rgb(207, 217, 222)"
+                        }}
+                        src={url}
+                    />
+                    <div style={{
+                        padding: "12px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                        justifyContent: "center",
+                        width: this.width - (this.margin + this.padding) * 2 - size,
+                    }}>
+                        <p style={{
+                            widows: "100%",
+                            fontSize: "15px",
+                            margin: "0px",
+                            color: "rgb(83, 100, 113)",
+                            ...this.textOverFlow({ lineClamp: 1 }),
+                        }}>{vanityUrl}</p>
+                        <p style={{
+                            fontSize: "15px",
+                            margin: "0px",
+                            color: "rgb(15, 20, 25)",
+                            ...this.textOverFlow({ lineClamp: 1 }),
+                        }}>{title}</p>
+                        <p style={{
+                            fontSize: "15px",
+                            margin: "0px",
+                            color: "rgb(83, 100, 113)",
+                            ...this.textOverFlow({ lineClamp: 2 }),
+                        }}>{description}</p>
+                    </div>
+                </div>
+            )
+
+        }
+
+        if (summary) {
+
+            return (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ width: "100%", height: "100%", display: "flex", position: "relative" }}>
+                        <img
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                borderRadius: "10px",
+                                border: "1px solid #e6e6e6",
+
+                            }}
+                            src={summary.url}
+                        />
+                        <p style={{
+                            fontSize: "13px",
+                            position: "absolute",
+                            margin: "0px",
+                            bottom: "12px",
+                            left: "12px",
+                            padding: "0px 4px",
+                            background: "rgba(0, 0, 0, 0.77)",
+                            color: "white",
+                            borderRadius: "4px",
+                            ...this.textOverFlow({ lineClamp: 1 }),
+                        }}>{title}</p>
+                    </div>
+                    <p style={{
+                        fontSize: "13px",
+                        margin: "0px",
+                        color: "#536471",
+                    }}>
+                        From {vanityUrl}
+                    </p>
+                </div>
+            )
+        }
+        return <p>ERROR</p>
+    }
+
 
 
     username: TweetImageRenderType = ({ data }) => {
@@ -460,7 +599,7 @@ export class RenderBasicImage extends TweetRenderImage {
         });
 
         const charDataList = replacedSplit.map(({ char, index }) => {
-            const link = [...normalizeHashtags, ...normalizeUrls].some(
+            const link = [...normalizeHashtags, ...normalizeUrls, ...normalizeUserMentions].some(
                 ({ start, end }) => start <= index && index < end
             );
             const bold = normalizeRichtextTags.some(
@@ -517,6 +656,11 @@ export class RenderBasicImage extends TweetRenderImage {
         const textElement: React.ReactElement[] = [];
 
         textDataList.forEach((t, i) => {
+
+            insert
+                .filter(({ index }) => t.start - 1 == index)
+                .forEach(({ fn }) => textElement.push(fn()));
+
             textElement.push(
                 <p
                     key={i}
@@ -547,14 +691,14 @@ export class RenderBasicImage extends TweetRenderImage {
             );
 
             insert
-                .filter(({ index }) => t.start <= index && index < t.end)
+                .filter(({ index }) => t.end + 1 == index)
                 .forEach(({ fn }) => textElement.push(fn()));
+
         });
 
-        const last = textDataList[textDataList.length - 1]?.end ?? 0;
-        insert
-            .filter(({ index }) => index >= last)
-            .forEach(({ fn }) => textElement.push(fn()));
+        if (textElement.length == 0) {
+            insert.forEach(({ fn }) => textElement.push(fn()));
+        }
 
         return (
             <div
