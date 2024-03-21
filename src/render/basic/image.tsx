@@ -1,5 +1,6 @@
 import split from "graphemesplit";
 import React from "react";
+import { type TweetRenderMerge } from "render/base/base";
 import {
     NoteTweetResultRichTextTagRichtextTypesEnum as RichtextTypesEnum,
     type UserProfileImageShapeEnum
@@ -12,6 +13,9 @@ export type RenderBasicImageParam = {
     video?: boolean;
     background?: string;
 };
+
+type TweetImageRenderGenericsType<T> = (props: TweetRenderMerge<Parameters<TweetImageRenderType>[0]> & T) => ReturnType<TweetImageRenderType>
+type TweetImageRenderQuotedType = TweetImageRenderGenericsType<{ quoted: boolean }>
 
 export class RenderBasicImage extends TweetRenderImage {
     width: NonNullable<RenderBasicImageParam["width"]>;
@@ -167,10 +171,47 @@ export class RenderBasicImage extends TweetRenderImage {
         const description = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "description")?.value.stringValue;
 
 
-        data.tweet.card?.legacy?.bindingValues.forEach((v) => {
-            console.log(v.key, v.value);
-        });
+        // data.tweet.card?.legacy?.bindingValues.forEach((v) => {
+        //     console.log(v.key, v.value);
+        // });
 
+        if (summary) {
+            return (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ width: "100%", height: "100%", display: "flex", position: "relative" }}>
+                        <img
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                borderRadius: "10px",
+                                border: "1px solid #e6e6e6",
+
+                            }}
+                            src={summary.url}
+                        />
+                        <p style={{
+                            fontSize: "13px",
+                            position: "absolute",
+                            margin: "0px",
+                            bottom: "12px",
+                            left: "12px",
+                            padding: "0px 4px",
+                            background: "rgba(0, 0, 0, 0.77)",
+                            color: "white",
+                            borderRadius: "4px",
+                            ...this.textOverFlow({ lineClamp: 1 }),
+                        }}>{title}</p>
+                    </div>
+                    <p style={{
+                        fontSize: "13px",
+                        margin: "0px",
+                        color: "#536471",
+                    }}>
+                        From {vanityUrl}
+                    </p>
+                </div>
+            )
+        }
         if (player || thumbnail) {
             const size = 129;
             const url = player?.url ?? thumbnail?.url;
@@ -224,45 +265,6 @@ export class RenderBasicImage extends TweetRenderImage {
             )
 
         }
-
-        if (summary) {
-
-            return (
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{ width: "100%", height: "100%", display: "flex", position: "relative" }}>
-                        <img
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                borderRadius: "10px",
-                                border: "1px solid #e6e6e6",
-
-                            }}
-                            src={summary.url}
-                        />
-                        <p style={{
-                            fontSize: "13px",
-                            position: "absolute",
-                            margin: "0px",
-                            bottom: "12px",
-                            left: "12px",
-                            padding: "0px 4px",
-                            background: "rgba(0, 0, 0, 0.77)",
-                            color: "white",
-                            borderRadius: "4px",
-                            ...this.textOverFlow({ lineClamp: 1 }),
-                        }}>{title}</p>
-                    </div>
-                    <p style={{
-                        fontSize: "13px",
-                        margin: "0px",
-                        color: "#536471",
-                    }}>
-                        From {vanityUrl}
-                    </p>
-                </div>
-            )
-        }
         return <p>ERROR</p>
     }
 
@@ -307,6 +309,29 @@ export class RenderBasicImage extends TweetRenderImage {
         const name = data.user.legacy.name;
         const id = data.user.legacy.screenName;
 
+        const legacy = data.tweet.legacy!;
+        const extEntities = legacy.extendedEntities;
+
+
+        const videoBlank = (() => {
+            const [i, blank] = getBiggerMedia(extEntities?.media ?? []);
+            if (blank && this.video) {
+                const resizedMedia = getResizedMediaByWidth(
+                    blank.videoInfo!.aspectRatio[0],
+                    blank.videoInfo!.aspectRatio[1],
+                    this.width - 20 * 2
+                );
+                return (
+                    <div style={{
+                        display: "flex",
+                        width: resizedMedia.width,
+                        height: resizedMedia.height,
+                    }}
+                    ></div>
+                )
+            }
+        })();
+
         return (
             <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
                 <div style={{ display: "flex", gap: "2px", alignItems: "center" }}>
@@ -329,12 +354,13 @@ export class RenderBasicImage extends TweetRenderImage {
                         </p>
                     </div>
                 </div>
-                <this.tweetRender data={data} />
+                <this.tweetRender data={data} quoted={false} />
                 {data.quoted && (
                     <div style={{ border: "1px solid #e6e6e6", borderRadius: "16px", padding: "10px", display: "flex" }}>
                         <this.quotedRender data={data.quoted} />
                     </div>
                 )}
+                {videoBlank}
             </div>
         );
     }
@@ -381,14 +407,14 @@ export class RenderBasicImage extends TweetRenderImage {
                     display: "flex",
                     flexDirection: "column",
                 }}>
-                    <this.tweetRender data={data} />
+                    <this.tweetRender data={data} quoted={true} />
                 </div>
             </div>
         );
     }
 
 
-    tweetRender: TweetImageRenderType = ({ data }) => {
+    tweetRender: TweetImageRenderQuotedType = ({ data, quoted }) => {
         const note = data.tweet.noteTweet?.noteTweetResults.result;
         const legacy = data.tweet.legacy!;
 
@@ -401,7 +427,7 @@ export class RenderBasicImage extends TweetRenderImage {
         const inlineMedia = note?.media?.inlineMedia ?? [];
         const richtextTags = note?.richtext?.richtextTags ?? [];
 
-        const [i, blank] = getBiggerMedia(extEntities?.media ?? []);
+        const video = this.video && !quoted;
 
         const normalizeMap: {
             array: number;
@@ -444,7 +470,7 @@ export class RenderBasicImage extends TweetRenderImage {
             ({ indices, idStr, mediaUrlHttps, type }) => ({
                 start: normalizeMap.findIndex(({ array }) => array === indices[0]),
                 end: normalizeMap.findIndex(({ array }) => array === indices[1]),
-                remove: this.video && type !== "photo",
+                remove: video && type !== "photo",
                 idStr,
                 mediaUrlHttps,
             })
@@ -453,7 +479,7 @@ export class RenderBasicImage extends TweetRenderImage {
             ({ indices, idStr, mediaUrlHttps, type }) => ({
                 start: normalizeMap.findIndex(({ array }) => array === indices[0]),
                 end: normalizeMap.findIndex(({ array }) => array === indices[1]),
-                remove: this.video && type !== "photo",
+                remove: video && type !== "photo",
                 idStr,
                 mediaUrlHttps,
             })
@@ -564,27 +590,6 @@ export class RenderBasicImage extends TweetRenderImage {
             });
         });
 
-        if (blank && this.video) {
-            const resizedMedia = getResizedMediaByWidth(
-                blank.videoInfo!.aspectRatio[0],
-                blank.videoInfo!.aspectRatio[1],
-                this.width - 20 * 2
-            );
-            insert.push({
-                index: trueSplit.length,
-                fn: () => (
-                    <div
-                        key={"biggerMedia"}
-                        style={{
-                            display: "flex",
-                            width: resizedMedia.width,
-                            height: resizedMedia.height,
-                        }}
-                    ></div>
-                ),
-            });
-        }
-
         const replacedSplit: typeof trueSplit = [];
         trueSplit.forEach(({ char, index }) => {
             const ignore = charIndices.some(
@@ -653,6 +658,12 @@ export class RenderBasicImage extends TweetRenderImage {
         // console.log("textDataList", textDataList);
         // console.log("data", data);
 
+        // console.log("insert", insert);
+        // textDataList.forEach((e) => {
+        //     console.log("start", e.start);
+        //     console.log("end", e.end);
+        // });
+
         const textElement: React.ReactElement[] = [];
 
         textDataList.forEach((t, i) => {
@@ -665,7 +676,7 @@ export class RenderBasicImage extends TweetRenderImage {
                 <p
                     key={i}
                     style={{
-                        fontSize: "17px", // or 14px 
+                        fontSize: quoted ? "14px " : "17px",
                         margin: "0px",
                         width: "100%",
                         display: "flex",
@@ -699,6 +710,10 @@ export class RenderBasicImage extends TweetRenderImage {
         if (textElement.length == 0) {
             insert.forEach(({ fn }) => textElement.push(fn()));
         }
+        // } else {
+        //     const last = textDataList[textDataList.length - 1];
+        //     insert.filter(({ index }) => index > last.end).forEach(({ fn }) => textElement.push(fn()));
+        // }
 
         return (
             <div
