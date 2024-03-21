@@ -8,6 +8,7 @@ import { getFont } from "./utils";
 const tweetIdList = [
     "1722118869178081318",
     "1770496837046415364",
+    "1770710875764146372",
 ];
 
 const res = tweetIdList.map(async (tweetId) => {
