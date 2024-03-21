@@ -178,29 +178,31 @@ export class RenderBasicImage extends TweetRenderImage {
         if (summary) {
             return (
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div style={{ width: "100%", height: "100%", display: "flex", position: "relative" }}>
+                    <div style={{ width: "100%", display: "flex", position: "relative" }}>
                         <img
                             style={{
                                 width: "100%",
-                                height: "100%",
                                 borderRadius: "10px",
                                 border: "1px solid #e6e6e6",
-
                             }}
                             src={summary.url}
                         />
-                        <p style={{
-                            fontSize: "13px",
+                        <div style={{
                             position: "absolute",
-                            margin: "0px",
                             bottom: "12px",
                             left: "12px",
-                            padding: "0px 4px",
-                            background: "rgba(0, 0, 0, 0.77)",
-                            color: "white",
-                            borderRadius: "4px",
-                            ...this.textOverFlow({ lineClamp: 1 }),
-                        }}>{title}</p>
+                            right: "12px",
+                            display: "flex",
+                        }}>
+                            <p style={{
+                                fontSize: "13px",
+                                padding: "0px 4px",
+                                background: "rgba(0, 0, 0, 0.77)",
+                                color: "white",
+                                borderRadius: "4px",
+                                ...this.textOverFlow({ lineClamp: 1 }),
+                            }}>{title}</p>
+                        </div>
                     </div>
                     <p style={{
                         fontSize: "13px",
@@ -665,6 +667,10 @@ export class RenderBasicImage extends TweetRenderImage {
         // });
 
         const textElement: React.ReactElement[] = [];
+
+        insert
+            .filter(({ index }) => 0 == index)
+            .forEach(({ fn }) => textElement.push(fn()));
 
         textDataList.forEach((t, i) => {
 
