@@ -648,9 +648,6 @@ export class RenderBasicImage extends TweetRenderImage {
             }
         });
 
-
-
-
         const replacedSplit: typeof trueSplit = [];
         trueSplit.forEach(({ char, index }) => {
             const ignore = charIndices.some(
@@ -691,7 +688,7 @@ export class RenderBasicImage extends TweetRenderImage {
         const textDataList: {
             start: number;
             end: number;
-            data: { char: string; properties: React.CSSProperties }[];
+            data: { char: string; properties: React.CSSProperties }[][];
         }[] = [];
 
         charDataList.forEach((data) => {
@@ -702,14 +699,27 @@ export class RenderBasicImage extends TweetRenderImage {
                 textDataList.push({
                     start: index,
                     end: index + 1,
-                    data: [data],
+                    data: [[data]],
                 });
             } else {
                 const last = textDataList.pop()!;
+                const lastDataLast = last.data.pop()!;
+                const add: typeof lastDataLast[] = [];
+                const lastData: typeof lastDataLast = [];
+
+                if (data.char.match(/[0-9a-zA-Z\.\/]/)) {
+                    lastData.push(data);
+                } else if (data.char === " ") {
+                    lastData.push(data);
+                    add.push([]);
+                } else {
+                    add.push([data]);
+                }
+
                 textDataList.push({
                     start: last.start,
                     end: index,
-                    data: [...last.data, data],
+                    data: [...last.data, [...lastDataLast, ...lastData], ...add],
                 });
             }
         });
@@ -748,20 +758,34 @@ export class RenderBasicImage extends TweetRenderImage {
                         flexWrap: "wrap",
                     }}
                 >
-                    {t.data.map(({ char, properties }, i) => (
-                        <span
-                            key={i}
-                            style={{
-                                color: this.textColor,
-                                ...(char == "\n" ? { width: "100%" } : {}),
-                                ...(char == " " ? { width: "0.25em" } : {}),
-                                ...(char == "\n" && t.data[i - 1]?.char == "\n" ? { height: "1em" } : {}),
-                                ...properties,
-                            }}
-                        >
-                            {char}
-                        </span>
-                    ))}
+                    {t.data.map(((y, i) => {
+                        const n = (y.length == 1 && y[0].char == "\n");
+                        const last = i > 0 && t.data[i - 1];
+                        const lastN = last && (last.length == 1 && last[0].char == "\n");
+
+                        return (
+                            <span key={i} style={{
+                                display: "flex",
+                                ...(n ? { width: "100%" } : {}),
+                                ...(lastN ? { height: "1em" } : {}),
+                            }}>
+                                {
+                                    y.map(({ char, properties }, i) => (
+                                        <span
+                                            key={i}
+                                            style={{
+                                                color: this.textColor,
+                                                ...(char == " " ? { width: "0.25em" } : {}),
+                                                ...properties,
+                                            }}
+                                        >
+                                            {char}
+                                        </span>
+                                    ))
+                                }
+                            </span>
+                        );
+                    }))}
                 </p>
             );
 
