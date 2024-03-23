@@ -17,6 +17,17 @@ export type RenderBasicImageParam = {
 type TweetImageRenderGenericsType<T> = (props: TweetRenderMerge<Parameters<TweetImageRenderType>[0]> & T) => ReturnType<TweetImageRenderType>
 type TweetImageRenderQuotedType = TweetImageRenderGenericsType<{ quoted: boolean }>
 
+
+const backgroundTheme = [
+    ["blueGradient", "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)"],
+    ["pinkGradient", "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)"],
+    ["redGradient", "linear-gradient(45deg, #FFC0CBaa 0%, #800080aa 100%)"],
+    ["orangeGradient", "linear-gradient(90deg, #FF0000aa 0%, #FFA500aa 100%)"],
+    ["purpleGradient", "linear-gradient(-45deg, #0077F2ee 0%,#c783ebee 100%)"]
+]
+
+
+
 export class RenderBasicImage extends TweetRenderImage {
     width: NonNullable<RenderBasicImageParam["width"]>;
     video: NonNullable<RenderBasicImageParam["video"]>;
@@ -28,7 +39,8 @@ export class RenderBasicImage extends TweetRenderImage {
         super();
         this.width = props.width;
         this.video = props.video ?? false;
-        this.background = props.background ?? "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)";
+        this.background = backgroundTheme.find(([key]) => key === props.background)?.[1] ?? props.background ?? backgroundTheme[0][1];
+
     }
 
     getBadge: TweetImageRenderType = ({ data }) => {
