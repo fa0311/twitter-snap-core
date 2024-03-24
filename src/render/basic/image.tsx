@@ -28,7 +28,12 @@ const gradientTheme = [
     ["pinkGradient", "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)"],
     ["redGradient", "linear-gradient(45deg, #FFC0CBaa 0%, #800080aa 100%)"],
     ["orangeGradient", "linear-gradient(90deg, #FF0000aa 0%, #FFA500aa 100%)"],
-    ["purpleGradient", "linear-gradient(-45deg, #0077F2ee 0%,#c783ebee 100%)"]
+    ["purpleGradient", "linear-gradient(-45deg, #0077F2ee 0%,#c783ebee 100%)"],
+    ["darkBlueGradient", "linear-gradient(-45deg, #003366dd 0%, #000033dd 50%,#000099dd 100%)"],
+    ["darkPinkGradient", "linear-gradient(135deg, #993366dd 0%, #660033dd 50%, #330066dd 100%)"],
+    ["darkRedGradient", "linear-gradient(45deg, #660000dd 0%, #330000dd 100%)"],
+    ["darkOrangeGradient", "linear-gradient(90deg, #663300dd 0%, #331900dd 100%)"],
+    ["darkPurpleGradient", "linear-gradient(-45deg, #330066dd 0%,#660099dd 100%)"]
 ]
 
 
@@ -50,6 +55,7 @@ export class RenderBasicImage extends TweetRenderImage {
         this.width = props.width;
         this.video = props.video ?? false;
         this.gradient = gradientTheme.find(([key]) => key === props.gradient)?.[1] ?? props.gradient ?? gradientTheme[0][1];
+        this.gradient = props.gradient ?? gradientTheme[5][1];
         this.background = props.backgroundColor ?? "#000000";
         this.textColor = props.textColor ?? "#ffffff";
         this.subTextColor = props.subTextColor ?? "#71767b"; //536471
@@ -270,7 +276,7 @@ export class RenderBasicImage extends TweetRenderImage {
                         flexDirection: "column",
                         gap: "2px",
                         justifyContent: "center",
-                        width: this.width - (this.margin + this.padding) * 2 - size,
+                        width: "100%",
                     }}>
                         <p style={{
                             widows: "100%",
@@ -609,7 +615,7 @@ export class RenderBasicImage extends TweetRenderImage {
                             style={{
                                 width: "100%",
                                 borderRadius: "10px",
-                                border: "1px solid #e6e6e6",
+                                border: `1px solid ${this.imageBorderColor}`,
                                 marginTop: "12px",
                             }}
                             src={m.mediaUrlHttps}
@@ -691,11 +697,11 @@ export class RenderBasicImage extends TweetRenderImage {
             data: { char: string; properties: React.CSSProperties }[][];
         }[] = [];
 
-        charDataList.forEach((data) => {
+        charDataList.forEach((data, i) => {
             const index = data.index;
             const split = insert.some((i) => i.index === index);
 
-            if (split || index === 0) {
+            if (split || i === 0) {
                 textDataList.push({
                     start: index,
                     end: index + 1,
