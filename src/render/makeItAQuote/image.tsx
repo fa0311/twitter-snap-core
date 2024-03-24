@@ -4,13 +4,16 @@ import { TweetImageRenderType, TweetRenderImage } from "../../render/base/image"
 
 
 export type RenderMakeItAQuoteImageParam = {
+    width: number;
 };
 
 
 export class RenderMakeItAQuoteImage extends TweetRenderImage {
+    width: NonNullable<RenderMakeItAQuoteImageParam["width"]>;
 
     constructor(props: RenderMakeItAQuoteImageParam) {
         super();
+        this.width = props.width;
     }
 
 
@@ -34,16 +37,16 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
             <div
                 style={{
                     display: "flex",
-                    width: "600px",
-                    height: "300px",
+                    width: this.width,
+                    height: this.width * 0.5,
                     background: "#000000",
                 }}
             >
                 <img
                     alt="icon"
                     style={{
-                        width: "300px",
-                        height: "300px",
+                        width: this.width * 0.5,
+                        height: this.width * 0.5,
                         maskImage: "linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))",
                     }}
                     src={icon}
@@ -55,8 +58,8 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
                             flexDirection: "column",
                             justifyContent: "center",
                             position: "relative",
-                            width: "350px",
-                            left: "-75px",
+                            width: this.width * 0.75 - 20,
+                            left: this.width * -0.25,
                         }}
                     >
                         {this.tweetRender({ data })}

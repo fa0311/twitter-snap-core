@@ -1,14 +1,32 @@
-import { RenderBasicImage } from "render/basic/image";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
 
 import { ThemeKeyType } from "app/component/twitter/settings";
 import { TweetRenderImage } from "render/base/image";
+import {
+  RenderBrightSpaceColorImage,
+  RenderDarkTwilightSkyColorImage,
+  RenderDarkVoidColorImage,
+  RenderDawnBlossomColorImage,
+  RenderFierySunsetColorImage,
+  RenderOceanBlueColorImage,
+  RenderSunsetGardenColorImage,
+  RenderTwilightMoonColorImage,
+  RenderTwilightSkyColorImage,
+} from "render/color/image";
 import { RenderMakeItAQuoteImage } from "render/makeItAQuote/image";
 
 const themeList: Record<ThemeKeyType, TweetRenderImage> = {
-  "video-false": new RenderBasicImage({ width: 600, video: false }),
-  "video-true": new RenderBasicImage({ width: 600, video: true }),
-  "make-it-a-quote": new RenderMakeItAQuoteImage({}),
+  "ocean-blue": new RenderOceanBlueColorImage({ width: 650, video: false }),
+  "sunset-garden": new RenderSunsetGardenColorImage({ width: 650, video: false }),
+  "dawn-blossom": new RenderDawnBlossomColorImage({ width: 650, video: false }),
+  "fiery-sunset": new RenderFierySunsetColorImage({ width: 650, video: false }),
+  "twilight-sky": new RenderTwilightSkyColorImage({ width: 650, video: false }),
+  "dark-void": new RenderDarkVoidColorImage({ width: 650, video: false }),
+  "bright-space": new RenderBrightSpaceColorImage({ width: 650, video: false }),
+  "dark-twilight-sky": new RenderDarkTwilightSkyColorImage({ width: 650, video: false }),
+  "dark-twilight-moon": new RenderTwilightMoonColorImage({ width: 650, video: false }),
+  "video-true": new RenderOceanBlueColorImage({ width: 650, video: true }),
+  "make-it-a-quote": new RenderMakeItAQuoteImage({ width: 650 }),
 };
 
 const guest = new TwitterOpenApi().getGuestClient();
@@ -34,7 +52,7 @@ export const TwitterJSX = async ({ tweetId, theme }: Props) => {
   return (
     <div
       style={{
-        width: "600px",
+        width: "650px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

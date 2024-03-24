@@ -11,56 +11,44 @@ import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils";
 export type RenderBasicImageParam = {
     width: number;
     video?: boolean;
-    gradient?: string;
-    backgroundColor?: string;
-    textColor?: string;
-    subTextColor?: string;
-    borderColor?: string;
-    imageBorderColor?: string;
+    gradient: string;
+    backgroundColor: string;
+    textColor: string;
+    subTextColor: string;
+    borderColor: string;
+    imageBorderColor: string;
+    boxShadow: string;
 };
 
 type TweetImageRenderGenericsType<T> = (props: TweetRenderMerge<Parameters<TweetImageRenderType>[0]> & T) => ReturnType<TweetImageRenderType>
 type TweetImageRenderQuotedType = TweetImageRenderGenericsType<{ quoted: boolean }>
 
 
-const gradientTheme = [
-    ["blueGradient", "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)"],
-    ["pinkGradient", "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)"],
-    ["redGradient", "linear-gradient(45deg, #FFC0CBaa 0%, #800080aa 100%)"],
-    ["orangeGradient", "linear-gradient(90deg, #FF0000aa 0%, #FFA500aa 100%)"],
-    ["purpleGradient", "linear-gradient(-45deg, #0077F2ee 0%,#c783ebee 100%)"],
-    ["darkBlueGradient", "linear-gradient(-45deg, #003366dd 0%, #000033dd 50%,#000099dd 100%)"],
-    ["darkPinkGradient", "linear-gradient(135deg, #993366dd 0%, #660033dd 50%, #330066dd 100%)"],
-    ["darkRedGradient", "linear-gradient(45deg, #660000dd 0%, #330000dd 100%)"],
-    ["darkOrangeGradient", "linear-gradient(90deg, #663300dd 0%, #331900dd 100%)"],
-    ["darkPurpleGradient", "linear-gradient(-45deg, #330066dd 0%,#660099dd 100%)"]
-]
-
-
-
 export class RenderBasicImage extends TweetRenderImage {
     width: NonNullable<RenderBasicImageParam["width"]>;
     video: NonNullable<RenderBasicImageParam["video"]>;
     gradient: NonNullable<RenderBasicImageParam["gradient"]>;
-    background: NonNullable<RenderBasicImageParam["backgroundColor"]>;
+    backgroundColor: NonNullable<RenderBasicImageParam["backgroundColor"]>;
     textColor: NonNullable<RenderBasicImageParam["textColor"]>;
     subTextColor: NonNullable<RenderBasicImageParam["subTextColor"]>;
     borderColor: NonNullable<RenderBasicImageParam["borderColor"]>;
     imageBorderColor: NonNullable<RenderBasicImageParam["imageBorderColor"]>;
-    margin: number = 20;
+    boxShadow: NonNullable<RenderBasicImageParam["boxShadow"]>;
+    margin: number = 30;
     padding: number = 12;
 
     constructor(props: RenderBasicImageParam) {
         super();
         this.width = props.width;
         this.video = props.video ?? false;
-        this.gradient = gradientTheme.find(([key]) => key === props.gradient)?.[1] ?? props.gradient ?? gradientTheme[0][1];
-        this.gradient = props.gradient ?? gradientTheme[5][1];
-        this.background = props.backgroundColor ?? "#000000";
-        this.textColor = props.textColor ?? "#ffffff";
-        this.subTextColor = props.subTextColor ?? "#71767b"; //536471
-        this.borderColor = props.borderColor ?? "#2f3336"; // cfd9de
-        this.imageBorderColor = props.imageBorderColor ?? "#000000"; // e6e6e6
+        this.gradient = props.gradient;
+        this.gradient = props.gradient
+        this.backgroundColor = props.backgroundColor;
+        this.textColor = props.textColor;
+        this.subTextColor = props.subTextColor;
+        this.borderColor = props.borderColor;
+        this.imageBorderColor = props.imageBorderColor;
+        this.boxShadow = props.boxShadow;
 
     }
 
@@ -163,12 +151,13 @@ export class RenderBasicImage extends TweetRenderImage {
                 <div
                     style={{
                         width: "100%",
-                        background: this.background,
+                        background: this.backgroundColor,
                         display: "flex",
                         flexDirection: "column",
                         borderRadius: "10px",
                         padding: this.padding,
                         gap: "12px",
+                        boxShadow: this.boxShadow,
                     }}
                 >
                     <this.userRender data={data} />
@@ -276,7 +265,7 @@ export class RenderBasicImage extends TweetRenderImage {
                         flexDirection: "column",
                         gap: "2px",
                         justifyContent: "center",
-                        width: "100%",
+                        width: this.width - (this.margin + this.padding) * 2 - size,
                     }}>
                         <p style={{
                             widows: "100%",

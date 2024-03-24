@@ -4,7 +4,20 @@ import Link from 'next/link';
 import { useState } from "react";
 
 
-const themeKey = ["video-false", "video-true", "make-it-a-quote"] as const;
+const themeKey = [
+    "ocean-blue",
+    "sunset-garden",
+    "dawn-blossom",
+    "fiery-sunset",
+    "twilight-sky",
+    "dark-void",
+    "bright-space",
+    "dark-twilight-sky",
+    "dark-twilight-moon",
+    "video-true",
+    "make-it-a-quote"
+] as const;
+
 export type ThemeKeyType = typeof themeKey[number];
 
 type TwitterJSXProps = Parameters<typeof TwitterJSX>[0];
