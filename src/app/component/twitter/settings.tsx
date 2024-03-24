@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from "react";
 
 
-const themeKey = ["video-false", "video-true"] as const;
+const themeKey = ["video-false", "video-true", "make-it-a-quote"] as const;
 export type ThemeKeyType = typeof themeKey[number];
 
 type TwitterJSXProps = Parameters<typeof TwitterJSX>[0];

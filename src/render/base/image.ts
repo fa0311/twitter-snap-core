@@ -1,3 +1,4 @@
+import React from "react";
 import { TweetApiUtilsData } from "twitter-openapi-typescript";
 
 export type TweetImageRenderType = (props: { data: TweetApiUtilsData }) => React.ReactElement;

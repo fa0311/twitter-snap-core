@@ -3,10 +3,12 @@ import { TwitterOpenApi } from "twitter-openapi-typescript";
 
 import { ThemeKeyType } from "app/component/twitter/settings";
 import { TweetRenderImage } from "render/base/image";
+import { RenderMakeItAQuoteImage } from "render/makeItAQuote/image";
 
 const themeList: Record<ThemeKeyType, TweetRenderImage> = {
   "video-false": new RenderBasicImage({ width: 600, video: false }),
   "video-true": new RenderBasicImage({ width: 600, video: true }),
+  "make-it-a-quote": new RenderMakeItAQuoteImage({}),
 };
 
 const guest = new TwitterOpenApi().getGuestClient();
