@@ -1,6 +1,6 @@
 {
   "name": "twitter-snap-core",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "scripts": {
     "example": "npm run example:theme && npm run example:video && npm run example:text",
     "example:text": "npx tsx example/text.ts",
