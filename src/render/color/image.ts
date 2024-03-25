@@ -65,45 +65,11 @@ export class RenderOceanBlueDarkColorImage extends RenderColorBaseImage {
         super({
             ...props,
             gradient: "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
-            shadow: 'none',
+            shadow: 'dark',
             dark: true
         });
     }
 }
-
-
-
-export class RenderOceanBlueShadowColorImage extends RenderColorBaseImage {
-    /* 海をのような青緑と青のグラデーション */
-    static theme = "ocean-blue-shadow" as const;
-    static description = "Ocean-like blue-green and blue gradient";
-
-    constructor(props: RenderColorImageParam) {
-        super({
-            ...props,
-            gradient: "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
-            shadow: 'light',
-            dark: false
-        });
-    }
-}
-
-
-export class RenderOceanBlueShadowDarkColorImage extends RenderColorBaseImage {
-    /* 海をのような青緑と青のグラデーション */
-    static theme = "ocean-blue-shadow-dark" as const;
-    static description = "Ocean-like blue-green and blue gradient";
-
-    constructor(props: RenderColorImageParam) {
-        super({
-            ...props,
-            gradient: "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
-            shadow: 'light',
-            dark: true
-        });
-    }
-}
-
 
 
 
@@ -133,7 +99,7 @@ export class RenderSunsetGardenDarkColorImage extends RenderColorBaseImage {
         super({
             ...props,
             gradient: "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)",
-            shadow: 'none',
+            shadow: 'dark',
             dark: true
         });
     }
@@ -141,6 +107,35 @@ export class RenderSunsetGardenDarkColorImage extends RenderColorBaseImage {
 
 
 
+export class RenderDawnBlossomColorImage extends RenderColorBaseImage {
+    /* 夜明けの花のような赤とピンクのグラデーション */
+    static theme = "dawn-blossom" as const;
+    static description = "Red and pink gradient like dawn flowers";
+
+    constructor(props: RenderColorImageParam) {
+        super({
+            ...props,
+            gradient: "linear-gradient(45deg, #ffd5dc 0%, #aa55aa 100%)",
+            shadow: 'none',
+            dark: false
+        });
+    }
+}
+
+export class RenderDawnBlossomDarkColorImage extends RenderColorBaseImage {
+    /* 夜明けの花のような赤とピンクのグラデーション */
+    static theme = "dawn-blossom-dark" as const;
+    static description = "Red and pink gradient like dawn flowers";
+
+    constructor(props: RenderColorImageParam) {
+        super({
+            ...props,
+            gradient: "linear-gradient(45deg, #ffd5dc 0%, #aa55aa 100%)",
+            shadow: 'dark',
+            dark: true
+        });
+    }
+}
 
 export class RenderFierySunsetColorImage extends RenderColorBaseImage {
     /* 炎のような赤とオレンジのグラデーション */
@@ -156,6 +151,24 @@ export class RenderFierySunsetColorImage extends RenderColorBaseImage {
         });
     }
 }
+
+
+export class RenderFierySunsetDarkColorImage extends RenderColorBaseImage {
+    /* 炎のような赤とオレンジのグラデーション */
+    static theme = "fiery-sunset-dark" as const;
+    static description = "Red and orange gradient like flames";
+
+    constructor(props: RenderColorImageParam) {
+        super({
+            ...props,
+            gradient: "linear-gradient(135deg, #FF0000aa 0%, #FFA500aa 100%)",
+            shadow: 'dark',
+            dark: true
+        });
+    }
+}
+
+
 
 export class RenderTwilightSkyColorImage extends RenderColorBaseImage {
     /* 薄明の空のような青と紫のグラデーション */
@@ -187,37 +200,6 @@ export class RenderTwilightSkyDarkColorImage extends RenderColorBaseImage {
         });
     }
 }
-
-export class RenderTwilightSkyShadowColorImage extends RenderColorBaseImage {
-    /* 薄明の空のような青と紫のグラデーション */
-    static theme = "twilight-sky-shadow" as const;
-    static description = "Blue and purple gradient like twilight sky";
-
-    constructor(props: RenderColorImageParam) {
-        super({
-            ...props,
-            gradient: "linear-gradient(-45deg, #0077F2ee 0%,#c783ebee 100%)",
-            shadow: 'light',
-            dark: false
-        });
-    }
-}
-
-export class RenderTwilightSkyShadowDarkColorImage extends RenderColorBaseImage {
-    /* 薄明の空のような青と紫のグラデーション */
-    static theme = "twilight-sky-shadow-dark" as const;
-    static description = "Blue and purple gradient like twilight sky";
-
-    constructor(props: RenderColorImageParam) {
-        super({
-            ...props,
-            gradient: "linear-gradient(-45deg, #0077F2ee 0%,#c783ebee 100%)",
-            shadow: 'light',
-            dark: true
-        });
-    }
-}
-
 
 
 export class RenderPlainColorImage extends RenderColorBaseImage {

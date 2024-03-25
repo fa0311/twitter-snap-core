@@ -1,9 +1,10 @@
 import {
+    RenderDawnBlossomColorImage,
+    RenderDawnBlossomDarkColorImage,
     RenderFierySunsetColorImage,
+    RenderFierySunsetDarkColorImage,
     RenderOceanBlueColorImage,
     RenderOceanBlueDarkColorImage,
-    RenderOceanBlueShadowColorImage,
-    RenderOceanBlueShadowDarkColorImage,
     RenderPlainColorImage,
     RenderPlainDarkColorImage,
     RenderSunsetGardenColorImage,
@@ -12,8 +13,6 @@ import {
     RenderTransparentImage,
     RenderTwilightSkyColorImage,
     RenderTwilightSkyDarkColorImage,
-    RenderTwilightSkyShadowColorImage,
-    RenderTwilightSkyShadowDarkColorImage
 } from "render/color/image";
 
 import { RenderMakeItAQuoteImage } from "render/makeItAQuote/image";
@@ -21,15 +20,14 @@ import { RenderMakeItAQuoteImage } from "render/makeItAQuote/image";
 export const RenderColorKey = [
     RenderOceanBlueColorImage,
     RenderOceanBlueDarkColorImage,
-    RenderOceanBlueShadowColorImage,
-    RenderOceanBlueShadowDarkColorImage,
     RenderSunsetGardenColorImage,
     RenderSunsetGardenDarkColorImage,
+    RenderDawnBlossomColorImage,
+    RenderDawnBlossomDarkColorImage,
     RenderFierySunsetColorImage,
+    RenderFierySunsetDarkColorImage,
     RenderTwilightSkyColorImage,
     RenderTwilightSkyDarkColorImage,
-    RenderTwilightSkyShadowColorImage,
-    RenderTwilightSkyShadowDarkColorImage,
     RenderPlainColorImage,
     RenderPlainDarkColorImage,
     RenderTransparentImage,

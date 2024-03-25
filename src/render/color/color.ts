@@ -1,12 +1,17 @@
+
 import {
   RenderColorBaseImage,
   RenderColorBaseImageParam,
   RenderColorImageParam,
+} from "render/color/image";
+
+import {
+  RenderDawnBlossomColorImage,
+  RenderDawnBlossomDarkColorImage,
   RenderFierySunsetColorImage,
+  RenderFierySunsetDarkColorImage,
   RenderOceanBlueColorImage,
   RenderOceanBlueDarkColorImage,
-  RenderOceanBlueShadowColorImage,
-  RenderOceanBlueShadowDarkColorImage,
   RenderPlainColorImage,
   RenderPlainDarkColorImage,
   RenderSunsetGardenColorImage,
@@ -15,9 +20,10 @@ import {
   RenderTransparentImage,
   RenderTwilightSkyColorImage,
   RenderTwilightSkyDarkColorImage,
-  RenderTwilightSkyShadowColorImage,
-  RenderTwilightSkyShadowDarkColorImage
 } from "render/color/image";
+
+
+
 import { TweetRender, TweetRenderMerge } from "../base/base";
 import { RenderBasicVideo, RenderBasicVideoParam } from "../basic/video";
 
@@ -45,18 +51,6 @@ export class RenderOceanBlueDarkColor extends TweetRender {
   }
 }
 
-export class RenderOceanBlueShadowColor extends TweetRender {
-  constructor(props: RenderColorParam) {
-    super({ image: new RenderOceanBlueShadowColorImage(props), video: new RenderBasicVideo(props) });
-  }
-}
-
-export class RenderOceanBlueShadowDarkColor extends TweetRender {
-  constructor(props: RenderColorParam) {
-    super({ image: new RenderOceanBlueShadowDarkColorImage(props), video: new RenderBasicVideo(props) });
-  }
-}
-
 export class RenderSunsetGardenColor extends TweetRender {
   constructor(props: RenderColorParam) {
     super({ image: new RenderSunsetGardenColorImage(props), video: new RenderBasicVideo(props) });
@@ -69,9 +63,27 @@ export class RenderSunsetGardenDarkColor extends TweetRender {
   }
 }
 
+export class RenderDawnBlossomColor extends TweetRender {
+  constructor(props: RenderColorParam) {
+    super({ image: new RenderDawnBlossomColorImage(props), video: new RenderBasicVideo(props) });
+  }
+}
+
+export class RenderDawnBlossomDarkColor extends TweetRender {
+  constructor(props: RenderColorParam) {
+    super({ image: new RenderDawnBlossomDarkColorImage(props), video: new RenderBasicVideo(props) });
+  }
+}
+
 export class RenderFierySunsetColor extends TweetRender {
   constructor(props: RenderColorParam) {
     super({ image: new RenderFierySunsetColorImage(props), video: new RenderBasicVideo(props) });
+  }
+}
+
+export class RenderFierySunsetDarkColor extends TweetRender {
+  constructor(props: RenderColorParam) {
+    super({ image: new RenderFierySunsetDarkColorImage(props), video: new RenderBasicVideo(props) });
   }
 }
 
@@ -87,18 +99,6 @@ export class RenderTwilightSkyDarkColor extends TweetRender {
   }
 }
 
-export class RenderTwilightSkyShadowColor extends TweetRender {
-  constructor(props: RenderColorParam) {
-    super({ image: new RenderTwilightSkyShadowColorImage(props), video: new RenderBasicVideo(props) });
-  }
-}
-
-export class RenderTwilightSkyShadowDarkColor extends TweetRender {
-  constructor(props: RenderColorParam) {
-    super({ image: new RenderTwilightSkyShadowDarkColorImage(props), video: new RenderBasicVideo(props) });
-  }
-}
-
 export class RenderPlainColor extends TweetRender {
   constructor(props: RenderColorParam) {
     super({ image: new RenderPlainColorImage(props), video: new RenderBasicVideo(props) });
@@ -111,16 +111,14 @@ export class RenderPlainDarkColor extends TweetRender {
   }
 }
 
-export class RenderTransparent extends TweetRender {
-  constructor(props: RenderColorParam) {
-    super({ image: new RenderTransparentImage(props), video: new RenderBasicVideo(props) });
-  }
-}
-
 export class RenderTransparentDark extends TweetRender {
   constructor(props: RenderColorParam) {
     super({ image: new RenderTransparentDarkImage(props), video: new RenderBasicVideo(props) });
   }
 }
 
-
+export class RenderTransparent extends TweetRender {
+  constructor(props: RenderColorParam) {
+    super({ image: new RenderTransparentImage(props), video: new RenderBasicVideo(props) });
+  }
+}

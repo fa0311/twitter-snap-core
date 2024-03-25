@@ -1,9 +1,10 @@
 import {
+    RenderDawnBlossomColor,
+    RenderDawnBlossomDarkColor,
     RenderFierySunsetColor,
+    RenderFierySunsetDarkColor,
     RenderOceanBlueColor,
     RenderOceanBlueDarkColor,
-    RenderOceanBlueShadowColor,
-    RenderOceanBlueShadowDarkColor,
     RenderPlainColor,
     RenderPlainDarkColor,
     RenderSunsetGardenColor,
@@ -12,9 +13,8 @@ import {
     RenderTransparentDark,
     RenderTwilightSkyColor,
     RenderTwilightSkyDarkColor,
-    RenderTwilightSkyShadowColor,
-    RenderTwilightSkyShadowDarkColor,
-} from "../render/color/color";
+} from "render/color/color";
+
 
 import { RenderMakeItAQuoteImage } from "render";
 
@@ -22,15 +22,14 @@ import { RenderMakeItAQuoteImage } from "render";
 export const themeList = {
     RenderOceanBlueColor,
     RenderOceanBlueDarkColor,
-    RenderOceanBlueShadowColor,
-    RenderOceanBlueShadowDarkColor,
     RenderSunsetGardenColor,
     RenderSunsetGardenDarkColor,
+    RenderDawnBlossomColor,
+    RenderDawnBlossomDarkColor,
     RenderFierySunsetColor,
+    RenderFierySunsetDarkColor,
     RenderTwilightSkyColor,
     RenderTwilightSkyDarkColor,
-    RenderTwilightSkyShadowColor,
-    RenderTwilightSkyShadowDarkColor,
     RenderPlainColor,
     RenderPlainDarkColor,
     RenderTransparent,
