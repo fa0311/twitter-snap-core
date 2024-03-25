@@ -11,6 +11,8 @@ import {
     RenderSunsetGardenDarkColorImage,
     RenderTransparentDarkImage,
     RenderTransparentImage,
+    RenderTransparentShadowDarkImage,
+    RenderTransparentShadowImage,
     RenderTwilightSkyColorImage,
     RenderTwilightSkyDarkColorImage,
 } from "render/color/image";
@@ -32,5 +34,7 @@ export const RenderColorKey = [
     RenderPlainDarkColorImage,
     RenderTransparentImage,
     RenderTransparentDarkImage,
+    RenderTransparentShadowImage,
+    RenderTransparentShadowDarkImage,
     RenderMakeItAQuoteImage,
 ] as const;

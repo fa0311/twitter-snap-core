@@ -262,3 +262,35 @@ export class RenderTransparentDarkImage extends RenderColorBaseImage {
         });
     }
 }
+
+export class RenderTransparentShadowImage extends RenderColorBaseImage {
+    /* 透明 */
+    static theme = "transparent-shadow" as const;
+    static description = "Transparent";
+
+    constructor(props: RenderColorImageParam) {
+        super({
+            ...props,
+            gradient: none,
+            shadow: 'dark',
+            dark: false
+        });
+    }
+}
+
+export class RenderTransparentShadowDarkImage extends RenderColorBaseImage {
+    /* 透明 */
+    static theme = "transparent-shadow-dark" as const;
+    static description = "Transparent";
+
+    constructor(props: RenderColorImageParam) {
+        super({
+            ...props,
+            gradient: none,
+            shadow: 'dark',
+            dark: true
+        });
+    }
+}
+
+

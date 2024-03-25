@@ -3,6 +3,8 @@ import {
   RenderColorBaseImage,
   RenderColorBaseImageParam,
   RenderColorImageParam,
+  RenderTransparentShadowDarkImage,
+  RenderTransparentShadowImage,
 } from "render/color/image";
 
 import {
@@ -120,5 +122,17 @@ export class RenderTransparentDark extends TweetRender {
 export class RenderTransparent extends TweetRender {
   constructor(props: RenderColorParam) {
     super({ image: new RenderTransparentImage(props), video: new RenderBasicVideo(props) });
+  }
+}
+
+export class RenderTransparentShadow extends TweetRender {
+  constructor(props: RenderColorParam) {
+    super({ image: new RenderTransparentShadowImage(props), video: new RenderBasicVideo(props) });
+  }
+}
+
+export class RenderTransparentDarkShadow extends TweetRender {
+  constructor(props: RenderColorParam) {
+    super({ image: new RenderTransparentShadowDarkImage(props), video: new RenderBasicVideo(props) });
   }
 }
