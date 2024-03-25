@@ -1,7 +1,7 @@
 import { ImageResponse } from "@vercel/og";
 import fs from "fs/promises";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
-import { RenderOceanBlueColor } from "../src/render/color/basic";
+import { RenderOceanBlueColor } from "../src/render/color/color";
 import { getFont } from "./utils";
 
 const tweetIdList = [
