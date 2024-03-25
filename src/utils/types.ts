@@ -11,8 +11,8 @@ import {
     RenderSunsetGardenDarkColor,
     RenderTransparent,
     RenderTransparentDark,
+    RenderTransparentDarkShadow,
     RenderTransparentShadow,
-    RenderTransparentShadowDark,
     RenderTwilightSkyColor,
     RenderTwilightSkyDarkColor,
 } from "render/color/color";
@@ -37,7 +37,7 @@ export const themeList = {
     RenderTransparent,
     RenderTransparentDark,
     RenderTransparentShadow,
-    RenderTransparentShadowDark,
+    RenderTransparentDarkShadow,
     RenderMakeItAQuoteImage,
 } as const
 
