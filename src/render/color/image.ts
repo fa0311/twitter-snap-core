@@ -23,9 +23,9 @@ export class RenderColorBaseImage extends RenderBasicImage {
                 case 'none':
                     return `0px 0px 0px 0px ${none}`;
                 case 'dark':
-                    return '0px 0px 50px 0px #00000088';
+                    return '0px 0px 20px 0px #00000088';
                 case 'light':
-                    return '0px 0px 50px 0px #ffffff88';
+                    return '0px 0px 20px 0px #ffffff88';
             }
         })();
 
