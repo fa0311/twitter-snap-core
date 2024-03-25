@@ -15,7 +15,7 @@ export default function Twitter({ params, searchParams }: Props) {
   const id = params.id;
 
   const param: SearchParams = {
-    theme: searchParams.theme ?? "video-false",
+    theme: searchParams.theme ?? "ocean-blue",
   };
 
   return (

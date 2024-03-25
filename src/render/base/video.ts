@@ -11,6 +11,10 @@ export type TweetVideoRenderType = (props: {
 
 export abstract class TweetRenderVideo {
     ffmpeg: FFmpegInfrastructure;
+
+    static theme = "no name";
+    static description = "no description";
+
     constructor(ffmpeg?: FFmpegInfrastructure) {
         this.ffmpeg = ffmpeg ?? new FFmpegInfrastructure();
     }

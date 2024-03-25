@@ -2,23 +2,11 @@
 import { type TwitterJSX } from "app/api/twitter/route";
 import Link from 'next/link';
 import { useState } from "react";
+import { RenderColorKey } from "../../key";
 
 
-const themeKey = [
-    "ocean-blue",
-    "sunset-garden",
-    "dawn-blossom",
-    "fiery-sunset",
-    "twilight-sky",
-    "dark-void",
-    "bright-space",
-    "dark-twilight-sky",
-    "dark-twilight-moon",
-    "video-true",
-    "make-it-a-quote"
-] as const;
 
-export type ThemeKeyType = typeof themeKey[number];
+export type ThemeKeyType = typeof RenderColorKey[number]["theme"];
 
 type TwitterJSXProps = Parameters<typeof TwitterJSX>[0];
 
@@ -36,8 +24,8 @@ export const TwitterSettings = ({ tweetId, theme }: TwitterJSXProps) => {
             <input value={id} onChange={(e) => setId(e.target.value)} />
             <select value={selectedTheme} onChange={(e) => setTheme(e.target.value as ThemeKeyType)}>
                 {
-                    themeKey.map((e) => (
-                        <option key={e} value={e}>{e}</option>
+                    RenderColorKey.map((e) => (
+                        <option key={e.theme} value={e.theme}>{e.theme}</option>
                     ))
                 }
             </select>

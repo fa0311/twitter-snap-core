@@ -2,8 +2,10 @@
   "name": "twitter-snap-core",
   "version": "0.0.17",
   "scripts": {
+    "example": "npm run example:theme && npm run example:video && npm run example:text",
     "example:text": "npx tsx example/text.ts",
     "example:video": "npx tsx example/video.ts",
+    "example:theme": "npx tsx example/theme.ts",
     "dev:style": "shx rm -rf .next && next dev",
     "start": "node dist/cli.js",
     "build": "npx tsc -p tsconfig.build.json"

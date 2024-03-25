@@ -42,7 +42,6 @@ export class RenderBasicImage extends TweetRenderImage {
         this.width = props.width;
         this.video = props.video ?? false;
         this.gradient = props.gradient;
-        this.gradient = props.gradient
         this.backgroundColor = props.backgroundColor;
         this.textColor = props.textColor;
         this.subTextColor = props.subTextColor;
@@ -222,7 +221,7 @@ export class RenderBasicImage extends TweetRenderImage {
                                 fontSize: "13px",
                                 padding: "0px 4px",
                                 background: "#000000c4",
-                                color: this.textColor,
+                                color: "#ffffff",
                                 borderRadius: "4px",
                                 ...this.textOverFlow({ lineClamp: 1 }),
                             }}>{title}</p>
@@ -291,7 +290,7 @@ export class RenderBasicImage extends TweetRenderImage {
             )
 
         }
-        return <p>ERROR</p>
+        throw new Error("OGP not found");
     }
 
 
@@ -701,14 +700,20 @@ export class RenderBasicImage extends TweetRenderImage {
                 const lastDataLast = last.data.pop()!;
                 const add: typeof lastDataLast[] = [];
                 const lastData: typeof lastDataLast = [];
+                const lastChar = lastDataLast[lastDataLast.length - 1];
 
-                if (data.char.match(/[0-9a-zA-Z\.\/]/)) {
+                const matchReg = /[0-9a-zA-Z\.\/]/;
+
+                if (data.char.match(matchReg)) {
                     lastData.push(data);
                 } else if (data.char === " ") {
                     lastData.push(data);
                     add.push([]);
-                } else {
+                } else if (lastChar?.char.match(matchReg)) {
                     add.push([data]);
+                } else {
+                    lastData.push(data);
+                    add.push([]);
                 }
 
                 textDataList.push({

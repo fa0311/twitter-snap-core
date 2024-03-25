@@ -5,6 +5,10 @@ export type TweetImageRenderType = (props: { data: TweetApiUtilsData }) => React
 
 export abstract class TweetRenderImage {
     static window = false;
+
+    static theme = "no name";
+    static description = "no description";
+
     get window() {
         return TweetRenderImage.window;
     }

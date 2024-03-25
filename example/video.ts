@@ -1,7 +1,7 @@
 import { ImageResponse } from "@vercel/og";
 import { promises as fs } from "fs";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
-import { RenderBasic } from "../src";
+import { RenderOceanBlueColor } from "../src/render/color/basic";
 import { getFont } from "./utils";
 
 
@@ -21,7 +21,7 @@ const res = tweetIdList.map(async (tweetId) => {
     const tweet = await api.getTweetResultByRestId({
         tweetId: tweetId,
     });
-    const render = new RenderBasic({
+    const render = new RenderOceanBlueColor({
         width: 600,
         video: true,
     });

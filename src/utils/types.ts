@@ -1,6 +1,42 @@
-import { RenderBasic } from "../render/basic/basic"
+import {
+    RenderFierySunsetColor,
+    RenderOceanBlueColor,
+    RenderOceanBlueDarkColor,
+    RenderOceanBlueShadowColor,
+    RenderOceanBlueShadowDarkColor,
+    RenderPlainColor,
+    RenderPlainDarkColor,
+    RenderSunsetGardenColor,
+    RenderSunsetGardenDarkColor,
+    RenderTransparent,
+    RenderTransparentDark,
+    RenderTwilightSkyColor,
+    RenderTwilightSkyDarkColor,
+    RenderTwilightSkyShadowColor,
+    RenderTwilightSkyShadowDarkColor,
+} from "../render/color/color";
 
-export const themeList = { RenderBasic } as const
+import { RenderMakeItAQuoteImage } from "render";
+
+
+export const themeList = {
+    RenderOceanBlueColor,
+    RenderOceanBlueDarkColor,
+    RenderOceanBlueShadowColor,
+    RenderOceanBlueShadowDarkColor,
+    RenderSunsetGardenColor,
+    RenderSunsetGardenDarkColor,
+    RenderFierySunsetColor,
+    RenderTwilightSkyColor,
+    RenderTwilightSkyDarkColor,
+    RenderTwilightSkyShadowColor,
+    RenderTwilightSkyShadowDarkColor,
+    RenderPlainColor,
+    RenderPlainDarkColor,
+    RenderTransparent,
+    RenderTransparentDark,
+    RenderMakeItAQuoteImage,
+} as const
 
 
 export type ThemeNameType = keyof typeof themeList
