@@ -18,7 +18,7 @@ import {
 } from "render/color/color";
 
 
-import { RenderMakeItAQuoteImage } from "render";
+import { RenderMakeItAQuoteImage } from "render/makeItAQuote/image";
 
 
 export const themeList = {
