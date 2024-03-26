@@ -5,8 +5,18 @@ export type RenderColorImageParam = {
   video?: boolean;
 };
 
-const omitList = ["backgroundColor", "textColor", "subTextColor", "borderColor", "imageBorderColor", "boxShadow"] as const;
-export type RenderColorBaseImageParam = Omit<RenderBasicImageParam, (typeof omitList)[number]> & { dark: boolean; shadow: "none" | "dark" | "light" };
+const omitList = [
+  "backgroundColor",
+  "textColor",
+  "subTextColor",
+  "borderColor",
+  "imageBorderColor",
+  "boxShadow",
+] as const;
+export type RenderColorBaseImageParam = Omit<
+  RenderBasicImageParam,
+  (typeof omitList)[number]
+> & { dark: boolean; shadow: "none" | "dark" | "light" };
 
 const none = "#ffffff00";
 
@@ -41,7 +51,8 @@ export class RenderOceanBlueColorImage extends RenderColorBaseImage {
   constructor(props: RenderColorImageParam) {
     super({
       ...props,
-      gradient: "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
+      gradient:
+        "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
       shadow: "none",
       dark: false,
     });
@@ -53,7 +64,8 @@ export class RenderOceanBlueDarkColorImage extends RenderColorBaseImage {
   constructor(props: RenderColorImageParam) {
     super({
       ...props,
-      gradient: "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
+      gradient:
+        "linear-gradient(-45deg, #0077F2ee 0%, #1DA1F2ee 50%,#4CFFE2ee 100%)",
       shadow: "dark",
       dark: true,
     });
@@ -65,7 +77,8 @@ export class RenderSunsetGardenColorImage extends RenderColorBaseImage {
   constructor(props: RenderColorImageParam) {
     super({
       ...props,
-      gradient: "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)",
+      gradient:
+        "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)",
       shadow: "none",
       dark: false,
     });
@@ -77,7 +90,8 @@ export class RenderSunsetGardenDarkColorImage extends RenderColorBaseImage {
   constructor(props: RenderColorImageParam) {
     super({
       ...props,
-      gradient: "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)",
+      gradient:
+        "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)",
       shadow: "dark",
       dark: true,
     });
@@ -150,7 +164,7 @@ export class RenderTwilightSkyDarkColorImage extends RenderColorBaseImage {
     super({
       ...props,
       gradient: "linear-gradient(-45deg, #0077F2ee 0%,#c783ebee 100%)",
-      shadow: "none",
+      shadow: "dark",
       dark: true,
     });
   }
