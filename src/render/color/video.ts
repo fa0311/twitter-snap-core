@@ -1,18 +1,17 @@
 import { FFmpegInfrastructure } from "../../infrastructure/ffmpeg";
-import { TweetRenderVideo, TweetVideoRenderType } from "../../render/base/video";
+import { TweetRenderVideo, TweetVideoRenderType } from "../base/video";
 
 export type RenderColorBaseVideoParam = {
-    ffmpeg?: FFmpegInfrastructure;
+  ffmpeg?: FFmpegInfrastructure;
 };
 
 export class RenderColorBaseVideo extends TweetRenderVideo {
-    /*  カラーのテーマの動画クラス */
-    constructor(props: RenderColorBaseVideoParam) {
-        super(props.ffmpeg);
-    }
+  /*  カラーのテーマの動画クラス */
+  constructor(props: RenderColorBaseVideoParam) {
+    super(props.ffmpeg);
+  }
 
-    render: TweetVideoRenderType = () => {
-        throw new Error("Method not implemented.");
-    };
+  render: TweetVideoRenderType = () => {
+    throw new Error("Method not implemented.");
+  };
 }
-

@@ -1,17 +1,16 @@
 import { FFmpegInfrastructure } from "../../infrastructure/ffmpeg";
-import { TweetRenderVideo, TweetVideoRenderType } from "../../render/base/video";
+import { TweetRenderVideo, TweetVideoRenderType } from "../base/video";
 
 export type RenderMakeItAQuotVideoParam = {
-    ffmpeg?: FFmpegInfrastructure;
+  ffmpeg?: FFmpegInfrastructure;
 };
 
 export class RenderMakeItAQuoteVideo extends TweetRenderVideo {
-    constructor(props: RenderMakeItAQuotVideoParam) {
-        super(props.ffmpeg);
-    }
+  constructor(props: RenderMakeItAQuotVideoParam) {
+    super(props.ffmpeg);
+  }
 
-    render: TweetVideoRenderType = () => {
-        throw new Error("Method not implemented.");
-    };
+  render: TweetVideoRenderType = () => {
+    throw new Error("Method not implemented.");
+  };
 }
-

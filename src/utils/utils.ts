@@ -13,18 +13,15 @@ export const getBiggerMedia = (extMedia: MediaExtended[]) => {
   return [video.indexOf(sorted[0]), sorted[0]] as const;
 };
 
-
 export const getResizedMediaByWidth = (
   aspectRatioWidth: number,
   aspectRatioHeight: number,
-  width: number,
+  width: number
 ) => {
-  const height = Math.floor(width * aspectRatioHeight / aspectRatioWidth);
+  const height = Math.floor((width * aspectRatioHeight) / aspectRatioWidth);
   if (height % 2) {
     return { width, height: height - 1 };
   } else {
     return { width, height };
   }
 };
-
-

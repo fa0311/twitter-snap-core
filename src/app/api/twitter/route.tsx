@@ -1,11 +1,9 @@
-import { TweetRenderImage } from "render/base/image";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
+import { TweetRenderImage } from "../../../render/base/image";
 import { imageThemeList, ImageThemeNameType } from "../../key";
 
-
-
 const themeList = Object.entries(imageThemeList).map(([k, e]) => {
-  return [k, new e({ width: 650, video: false })] as const
+  return [k, new e({ width: 650, video: false })] as const;
 });
 
 const guest = new TwitterOpenApi().getGuestClient();
@@ -39,6 +37,5 @@ export const TwitterJSX = async ({ tweetId, theme }: Props) => {
     >
       <render.render data={tweet.data} />
     </div>
-  )
-}
-
+  );
+};

@@ -1,13 +1,8 @@
 import { default as ffmpeg, default as ffprobe } from "fluent-ffmpeg";
 export type GetFFmpegType = () => ffmpeg.FfmpegCommand;
-export type DumpCommandType = (
-  prefix: string,
-  command: ffmpeg.FfmpegCommand
-) => void;
+export type DumpCommandType = (prefix: string, command: ffmpeg.FfmpegCommand) => void;
 export type RunFFmpegType = (command: ffmpeg.FfmpegCommand) => Promise<unknown>;
-export type RunFFprobeType = (
-  command: ffprobe.FfmpegCommand
-) => Promise<ffmpeg.FfprobeData>;
+export type RunFFprobeType = (command: ffprobe.FfmpegCommand) => Promise<ffmpeg.FfprobeData>;
 
 export class FFmpegInfrastructure {
   ffmpegPath: string;
@@ -17,10 +12,8 @@ export class FFmpegInfrastructure {
   static ffprobeDefaultPath = "ffprobe";
 
   constructor(args?: { ffmpegPath?: string; ffprobePath?: string }) {
-    this.ffmpegPath =
-      args?.ffmpegPath ?? FFmpegInfrastructure.ffmpegDefaultPath;
-    this.ffprobePath =
-      args?.ffprobePath ?? FFmpegInfrastructure.ffprobeDefaultPath;
+    this.ffmpegPath = args?.ffmpegPath ?? FFmpegInfrastructure.ffmpegDefaultPath;
+    this.ffprobePath = args?.ffprobePath ?? FFmpegInfrastructure.ffprobeDefaultPath;
   }
   getFFmpeg: GetFFmpegType = () => {
     return ffmpeg().setFfmpegPath(this.ffmpegPath);
@@ -30,10 +23,11 @@ export class FFmpegInfrastructure {
   };
 
   dumpCommand: DumpCommandType = (prefix, command) => {
-    const c = `${prefix} ${command
+    const suffix = command
       ._getArguments()
       .map((e) => `"${e}"`)
-      .join(" ")}`;
+      .join(" ");
+    const c = `${prefix} ${suffix}`;
     console.log(c);
   };
 
