@@ -6,7 +6,7 @@ import { RenderColorKey } from "../../key";
 
 
 
-export type ThemeKeyType = typeof RenderColorKey[number]["theme"];
+export type ThemeKeyType = typeof RenderColorKey[number]["themeName"];
 
 type TwitterJSXProps = Parameters<typeof TwitterJSX>[0];
 
@@ -25,7 +25,7 @@ export const TwitterSettings = ({ tweetId, theme }: TwitterJSXProps) => {
             <select value={selectedTheme} onChange={(e) => setTheme(e.target.value as ThemeKeyType)}>
                 {
                     RenderColorKey.map((e) => (
-                        <option key={e.theme} value={e.theme}>{e.theme}</option>
+                        <option key={e.themeName} value={e.themeName}>{e.themeName}</option>
                     ))
                 }
             </select>

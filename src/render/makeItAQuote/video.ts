@@ -6,6 +6,8 @@ export type RenderMakeItAQuotVideoParam = {
 };
 
 export class RenderMakeItAQuoteVideo extends TweetRenderVideo {
+    static readonly themeName = "make-it-a-quote" as const;
+    static readonly description = "Make it a quote theme";
 
     constructor(props: RenderMakeItAQuotVideoParam) {
         super(props.ffmpeg);

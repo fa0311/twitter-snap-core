@@ -4,10 +4,10 @@ import { TweetApiUtilsData } from "twitter-openapi-typescript";
 export type TweetImageRenderType = (props: { data: TweetApiUtilsData }) => React.ReactElement;
 
 export abstract class TweetRenderImage {
-    static window = false;
+    static readonly themeName: string;
+    static readonly description: string;
 
-    static theme = "no name";
-    static description = "no description";
+    static window = false;
 
     get window() {
         return TweetRenderImage.window;

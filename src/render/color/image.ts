@@ -1,5 +1,5 @@
 
-import { RenderBasicImage, RenderBasicImageParam } from '../basic/image';
+import { RenderBasicAbstractImage, RenderBasicImageParam } from '../basic/image';
 
 export type RenderColorImageParam = {
     width: number;
@@ -12,10 +12,8 @@ export type RenderColorBaseImageParam = Omit<RenderBasicImageParam, typeof omitL
 
 const none = "#ffffff00";
 
-export class RenderColorBaseImage extends RenderBasicImage {
+export abstract class RenderColorBaseImage extends RenderBasicAbstractImage {
     /*  色の付いたテーマの基底クラス */
-    static theme = "color-base";
-    static description = "Colored theme base class";
 
     constructor(props: RenderColorBaseImageParam) {
         const boxShadow = (() => {
@@ -43,8 +41,8 @@ export class RenderColorBaseImage extends RenderBasicImage {
 
 export class RenderOceanBlueColorImage extends RenderColorBaseImage {
     /* 海をのような青緑と青のグラデーション */
-    static theme = "ocean-blue" as const;
-    static description = "Ocean-like blue-green and blue gradient";
+    static readonly themeName = "ocean-blue" as const;
+    static readonly description = "Ocean-like blue-green and blue gradient";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -58,8 +56,8 @@ export class RenderOceanBlueColorImage extends RenderColorBaseImage {
 
 export class RenderOceanBlueDarkColorImage extends RenderColorBaseImage {
     /* 海をのような青緑と青のグラデーション */
-    static theme = "ocean-blue-dark" as const;
-    static description = "Ocean-like blue-green and blue gradient";
+    static readonly themeName = "ocean-blue-dark" as const;
+    static readonly description = "Ocean-like blue-green and blue gradient";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -76,8 +74,8 @@ export class RenderOceanBlueDarkColorImage extends RenderColorBaseImage {
 
 export class RenderSunsetGardenColorImage extends RenderColorBaseImage {
     /* 夕暮れの庭園のような緑とオレンジのグラデーション */
-    static theme = "sunset-garden" as const;
-    static description = "Green and orange gradient like a sunset garden";
+    static readonly themeName = "sunset-garden" as const;
+    static readonly description = "Green and orange gradient like a sunset garden";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -92,8 +90,8 @@ export class RenderSunsetGardenColorImage extends RenderColorBaseImage {
 
 export class RenderSunsetGardenDarkColorImage extends RenderColorBaseImage {
     /* 夕暮れの庭園のような緑とオレンジのグラデーション */
-    static theme = "sunset-garden-dark" as const;
-    static description = "Green and orange gradient like a sunset garden";
+    static readonly themeName = "sunset-garden-dark" as const;
+    static readonly description = "Green and orange gradient like a sunset garden";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -109,8 +107,8 @@ export class RenderSunsetGardenDarkColorImage extends RenderColorBaseImage {
 
 export class RenderDawnBlossomColorImage extends RenderColorBaseImage {
     /* 夜明けの花のような赤とピンクのグラデーション */
-    static theme = "dawn-blossom" as const;
-    static description = "Red and pink gradient like dawn flowers";
+    static readonly themeName = "dawn-blossom" as const;
+    static readonly description = "Red and pink gradient like dawn flowers";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -124,8 +122,8 @@ export class RenderDawnBlossomColorImage extends RenderColorBaseImage {
 
 export class RenderDawnBlossomDarkColorImage extends RenderColorBaseImage {
     /* 夜明けの花のような赤とピンクのグラデーション */
-    static theme = "dawn-blossom-dark" as const;
-    static description = "Red and pink gradient like dawn flowers";
+    static readonly themeName = "dawn-blossom-dark" as const;
+    static readonly description = "Red and pink gradient like dawn flowers";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -139,8 +137,8 @@ export class RenderDawnBlossomDarkColorImage extends RenderColorBaseImage {
 
 export class RenderFierySunsetColorImage extends RenderColorBaseImage {
     /* 炎のような赤とオレンジのグラデーション */
-    static theme = "fiery-sunset" as const;
-    static description = "Red and orange gradient like flames";
+    static readonly themeName = "fiery-sunset" as const;
+    static readonly description = "Red and orange gradient like flames";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -155,8 +153,8 @@ export class RenderFierySunsetColorImage extends RenderColorBaseImage {
 
 export class RenderFierySunsetDarkColorImage extends RenderColorBaseImage {
     /* 炎のような赤とオレンジのグラデーション */
-    static theme = "fiery-sunset-dark" as const;
-    static description = "Red and orange gradient like flames";
+    static readonly themeName = "fiery-sunset-dark" as const;
+    static readonly description = "Red and orange gradient like flames";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -172,8 +170,8 @@ export class RenderFierySunsetDarkColorImage extends RenderColorBaseImage {
 
 export class RenderTwilightSkyColorImage extends RenderColorBaseImage {
     /* 薄明の空のような青と紫のグラデーション */
-    static theme = "twilight-sky" as const;
-    static description = "Blue and purple gradient like twilight sky";
+    static readonly themeName = "twilight-sky" as const;
+    static readonly description = "Blue and purple gradient like twilight sky";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -188,8 +186,8 @@ export class RenderTwilightSkyColorImage extends RenderColorBaseImage {
 
 export class RenderTwilightSkyDarkColorImage extends RenderColorBaseImage {
     /* 薄明の空のような青と紫のグラデーション */
-    static theme = "twilight-sky-dark" as const;
-    static description = "Blue and purple gradient like twilight sky";
+    static readonly themeName = "twilight-sky-dark" as const;
+    static readonly description = "Blue and purple gradient like twilight sky";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -204,8 +202,8 @@ export class RenderTwilightSkyDarkColorImage extends RenderColorBaseImage {
 
 export class RenderPlainColorImage extends RenderColorBaseImage {
     /* 無地 */
-    static theme = "plain" as const;
-    static description = "Plain";
+    static readonly themeName = "plain" as const;
+    static readonly description = "Plain";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -220,8 +218,8 @@ export class RenderPlainColorImage extends RenderColorBaseImage {
 
 export class RenderPlainDarkColorImage extends RenderColorBaseImage {
     /* 無地 */
-    static theme = "plain-dark" as const;
-    static description = "Plain";
+    static readonly themeName = "plain-dark" as const;
+    static readonly description = "Plain";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -235,8 +233,8 @@ export class RenderPlainDarkColorImage extends RenderColorBaseImage {
 
 export class RenderTransparentImage extends RenderColorBaseImage {
     /* 透明 */
-    static theme = "transparent" as const;
-    static description = "Transparent";
+    static readonly themeName = "transparent" as const;
+    static readonly description = "Transparent";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -250,8 +248,8 @@ export class RenderTransparentImage extends RenderColorBaseImage {
 
 export class RenderTransparentDarkImage extends RenderColorBaseImage {
     /* 透明 */
-    static theme = "transparent-dark" as const;
-    static description = "Transparent";
+    static readonly themeName = "transparent-dark" as const;
+    static readonly description = "Transparent";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -265,8 +263,8 @@ export class RenderTransparentDarkImage extends RenderColorBaseImage {
 
 export class RenderTransparentShadowImage extends RenderColorBaseImage {
     /* 透明 */
-    static theme = "transparent-shadow" as const;
-    static description = "Transparent";
+    static readonly themeName = "transparent-shadow" as const;
+    static readonly description = "Transparent";
 
     constructor(props: RenderColorImageParam) {
         super({
@@ -280,8 +278,8 @@ export class RenderTransparentShadowImage extends RenderColorBaseImage {
 
 export class RenderTransparentShadowDarkImage extends RenderColorBaseImage {
     /* 透明 */
-    static theme = "transparent-shadow-dark" as const;
-    static description = "Transparent";
+    static readonly themeName = "transparent-shadow-dark" as const;
+    static readonly description = "Transparent";
 
     constructor(props: RenderColorImageParam) {
         super({

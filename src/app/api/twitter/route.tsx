@@ -6,7 +6,7 @@ import { RenderColorKey } from "../../key";
 
 
 const themeList = RenderColorKey.map((e) => {
-  return [e.theme, new e({ width: 650, video: false })] as const
+  return [e.themeName, new e({ width: 650, video: false })] as const
 });
 
 const guest = new TwitterOpenApi().getGuestClient();

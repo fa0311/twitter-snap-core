@@ -9,7 +9,10 @@ export type RenderBasicVideoParam = {
     ffmpegAdditonalOption?: string[];
 };
 
-export class RenderBasicVideo extends TweetRenderVideo {
+
+
+export abstract class RenderBasicAbstractVideo extends TweetRenderVideo {
+
     width: NonNullable<RenderBasicVideoParam["width"]>;
     video: NonNullable<RenderBasicVideoParam["video"]>;
     margin: number = 20;
@@ -139,6 +142,14 @@ export class RenderBasicVideo extends TweetRenderVideo {
 
         return { temp: removeList };
     };
-
 }
 
+
+
+
+
+export class RenderBasicVideo extends RenderBasicAbstractVideo {
+    /*  基本のテーマの動画クラス */
+    static readonly themeName = "basic" as const;
+    static readonly description = "Basic theme video class";
+}
