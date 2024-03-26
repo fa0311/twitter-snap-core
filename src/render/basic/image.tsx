@@ -24,7 +24,7 @@ type TweetImageRenderGenericsType<T> = (props: TweetRenderMerge<Parameters<Tweet
 type TweetImageRenderQuotedType = TweetImageRenderGenericsType<{ quoted: boolean }>
 
 
-export abstract class RenderBasicAbstractImage extends TweetRenderImage {
+export class RenderBasicImage extends TweetRenderImage {
     /*  基本のテーマの基底クラス */
     width: NonNullable<RenderBasicImageParam["width"]>;
     video: NonNullable<RenderBasicImageParam["video"]>;
@@ -817,9 +817,4 @@ export abstract class RenderBasicAbstractImage extends TweetRenderImage {
             </div>
         );
     };
-}
-
-export class RenderBasicImage extends RenderBasicAbstractImage {
-    static readonly themeName: string = "basic";
-    static readonly description: string = "Basic theme base class";
 }

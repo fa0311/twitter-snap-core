@@ -19,7 +19,7 @@ import {
 
 import { RenderMakeItAQuoteImage } from "render/makeItAQuote/image";
 
-export const RenderColorKey = [
+export const imageThemeList = {
     RenderOceanBlueColorImage,
     RenderOceanBlueDarkColorImage,
     RenderSunsetGardenColorImage,
@@ -37,4 +37,8 @@ export const RenderColorKey = [
     RenderTransparentShadowImage,
     RenderTransparentShadowDarkImage,
     RenderMakeItAQuoteImage,
-] as const;
+} as const;
+
+
+export type ImageThemeNameType = keyof typeof imageThemeList
+export type ImageThemeList = (typeof imageThemeList)[keyof typeof imageThemeList]

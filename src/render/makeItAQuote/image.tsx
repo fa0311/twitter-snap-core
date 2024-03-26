@@ -9,9 +9,6 @@ export type RenderMakeItAQuoteImageParam = {
 
 
 export class RenderMakeItAQuoteImage extends TweetRenderImage {
-    static readonly themeName = "make-it-a-quote" as const;
-    static readonly description = "Make it a quote theme";
-
     width: NonNullable<RenderMakeItAQuoteImageParam["width"]>;
 
     constructor(props: RenderMakeItAQuoteImageParam) {

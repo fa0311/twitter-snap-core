@@ -11,7 +11,7 @@ export type RenderBasicVideoParam = {
 
 
 
-export abstract class RenderBasicAbstractVideo extends TweetRenderVideo {
+export class RenderBasicVideo extends TweetRenderVideo {
 
     width: NonNullable<RenderBasicVideoParam["width"]>;
     video: NonNullable<RenderBasicVideoParam["video"]>;
@@ -142,14 +142,4 @@ export abstract class RenderBasicAbstractVideo extends TweetRenderVideo {
 
         return { temp: removeList };
     };
-}
-
-
-
-
-
-export class RenderBasicVideo extends RenderBasicAbstractVideo {
-    /*  基本のテーマの動画クラス */
-    static readonly themeName = "basic" as const;
-    static readonly description = "Basic theme video class";
 }

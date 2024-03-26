@@ -1,12 +1,11 @@
-import { ThemeKeyType } from "app/component/twitter/settings";
 import { TweetRenderImage } from "render/base/image";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
-import { RenderColorKey } from "../../key";
+import { imageThemeList, ImageThemeNameType } from "../../key";
 
 
 
-const themeList = RenderColorKey.map((e) => {
-  return [e.themeName, new e({ width: 650, video: false })] as const
+const themeList = Object.entries(imageThemeList).map(([k, e]) => {
+  return [k, new e({ width: 650, video: false })] as const
 });
 
 const guest = new TwitterOpenApi().getGuestClient();
@@ -15,7 +14,7 @@ TweetRenderImage.window = true;
 
 type Props = {
   tweetId: string;
-  theme: ThemeKeyType;
+  theme: ImageThemeNameType;
 };
 
 export const TwitterJSX = async ({ tweetId, theme }: Props) => {
@@ -24,7 +23,7 @@ export const TwitterJSX = async ({ tweetId, theme }: Props) => {
     tweetId: tweetId,
   });
 
-  const render = themeList.find((e) => e[0] === theme)![1];
+  const render = (themeList.find((e) => e[0] === theme) ?? themeList[0])[1];
 
   if (tweet.data === undefined) {
     return <div>tweet.data is undefined</div>;

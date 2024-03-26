@@ -12,9 +12,6 @@ export type TweetRenderParam = {
 };
 
 export abstract class TweetRender {
-    static readonly themeName: string;
-    static readonly description: string;
-
     imageRender: TweetImageRenderType;
     videoRender: TweetVideoRenderType;
     constructor(props: TweetRenderParam) {

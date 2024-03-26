@@ -7,9 +7,6 @@ export type RenderColorBaseVideoParam = {
 
 export class RenderColorBaseVideo extends TweetRenderVideo {
     /*  カラーのテーマの動画クラス */
-    static readonly themeName = "color-base" as const;
-    static readonly description = "Color theme video class";
-
     constructor(props: RenderColorBaseVideoParam) {
         super(props.ffmpeg);
     }
