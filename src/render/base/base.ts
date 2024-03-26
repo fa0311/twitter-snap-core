@@ -7,14 +7,14 @@ export type TweetRenderMerge<T> = {
 
 export type TweetRenderParam = {
   image: TweetRenderImage;
-  video: TweetRenderVideo;
+  video?: TweetRenderVideo;
 };
 
 export abstract class TweetRender {
   imageRender: TweetImageRenderType;
-  videoRender: TweetVideoRenderType;
+  videoRender?: TweetVideoRenderType;
   constructor(props: TweetRenderParam) {
     this.imageRender = props.image.render;
-    this.videoRender = props.video.render;
+    this.videoRender = props.video?.render;
   }
 }

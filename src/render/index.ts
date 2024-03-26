@@ -8,8 +8,6 @@ export * from "./basic/video";
 
 export * from "./color/color";
 export * from "./color/image";
-export * from "./color/video";
 
 export * from "./makeItAQuote/image";
 export * from "./makeItAQuote/makeItAQuote";
-export * from "./makeItAQuote/video";

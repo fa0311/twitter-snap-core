@@ -1,6 +1,6 @@
 {
   "name": "twitter-snap-core",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "Create beautiful Tweet images fast",
   "keywords": [
     "twitter",
@@ -29,7 +29,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "graphemesplit": "^2.4.4",
     "react": "^18.2.0",
-    "twitter-openapi-typescript": "<2.0.0",
+    "twitter-openapi-typescript": "^0.0.31",
     "twitter-openapi-typescript-generated": "*"
   },
   "devDependencies": {
