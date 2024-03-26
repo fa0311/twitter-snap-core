@@ -78,7 +78,7 @@ export class RenderSunsetGardenColorImage extends RenderColorBaseImage {
     super({
       ...props,
       gradient:
-        "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)",
+        "linear-gradient(135deg, #ffced6 0%, #ffdeba 50%, #b5f4b5 100%)",
       shadow: "none",
       dark: false,
     });
@@ -91,7 +91,7 @@ export class RenderSunsetGardenDarkColorImage extends RenderColorBaseImage {
     super({
       ...props,
       gradient:
-        "linear-gradient(135deg, #FFB6C1aa 0%, #ff9d3055 50%, #90EE90aa 100%)",
+        "linear-gradient(135deg, #ffced6 0%, #ffdeba 50%, #b5f4b5 100%)",
       shadow: "dark",
       dark: true,
     });

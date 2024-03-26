@@ -4,7 +4,16 @@ import { TwitterOpenApi } from "twitter-openapi-typescript";
 import { RenderOceanBlueColor } from "../src/render/color/color";
 import { getFont } from "./utils";
 
-const tweetIdList = ["1518623997054918657", "1757846601660575906", "1756047573679550659", "1720181935685992797", "1720694816835801584", "1349129669258448897", "1770752661299610028", "1770053822255431954"];
+const tweetIdList = [
+  "1518623997054918657",
+  "1757846601660575906",
+  "1756047573679550659",
+  "1720181935685992797",
+  "1720694816835801584",
+  "1349129669258448897",
+  "1770752661299610028",
+  "1770053822255431954",
+];
 
 (async () => {
   const { segoeui400i, segoeui400, segoeui700i, segoeui700 } = await getFont();

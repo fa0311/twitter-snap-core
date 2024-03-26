@@ -4,7 +4,11 @@ import { TwitterOpenApi } from "twitter-openapi-typescript";
 import { RenderOceanBlueColor } from "../src/render/color/color";
 import { getFont } from "./utils";
 
-const tweetIdList = ["1722118869178081318", "1770496837046415364", "1770710875764146372"];
+const tweetIdList = [
+  "1722118869178081318",
+  "1770496837046415364",
+  "1770710875764146372",
+];
 
 const res = tweetIdList.map(async (tweetId) => {
   const { segoeui400i, segoeui400, segoeui700i, segoeui700 } = await getFont();
@@ -55,7 +59,7 @@ const res = tweetIdList.map(async (tweetId) => {
   const png = Buffer.from(await img.arrayBuffer());
   await fs.writeFile(`temp/${tweetId}.png`, png);
 
-  const res = await render.videoRender({
+  const res = await render.videoRender!({
     data: tweet.data!,
     image: `temp/${tweetId}.png`,
     output: `temp/${tweetId}.mp4`,

@@ -16,7 +16,8 @@ type ResType = {
 };
 
 export const getFont = async (): Promise<ResType> => {
-  const base = "https://github.com/fa0311/twitter-snap-core/releases/download/assets-fonts/";
+  const base =
+    "https://github.com/fa0311/twitter-snap-core/releases/download/assets-fonts/";
 
   const list = [
     ["SEGOEUIL.TTF", "segoeui", 300, "normal"],
