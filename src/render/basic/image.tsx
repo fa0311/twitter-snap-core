@@ -1,6 +1,9 @@
 import split from "graphemesplit";
 import React from "react";
-import { NoteTweetResultRichTextTagRichtextTypesEnum as RichtextTypesEnum, type UserProfileImageShapeEnum } from "twitter-openapi-typescript-generated";
+import {
+  NoteTweetResultRichTextTagRichtextTypesEnum as RichtextTypesEnum,
+  type UserProfileImageShapeEnum,
+} from "twitter-openapi-typescript-generated";
 import { type TweetRenderMerge } from "../../render/base/base";
 import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils";
 import { TweetImageRenderType, TweetRenderImage } from "../base/image";
@@ -17,7 +20,9 @@ export type RenderBasicImageParam = {
   boxShadow: string;
 };
 
-type TweetImageRenderGenericsType<T> = (props: TweetRenderMerge<Parameters<TweetImageRenderType>[0]> & T) => ReturnType<TweetImageRenderType>;
+type TweetImageRenderGenericsType<T> = (
+  props: TweetRenderMerge<Parameters<TweetImageRenderType>[0]> & T
+) => ReturnType<TweetImageRenderType>;
 type TweetImageRenderQuotedType = TweetImageRenderGenericsType<{
   quoted: boolean;
 }>;
@@ -71,7 +76,9 @@ export class RenderBasicImage extends TweetRenderImage {
     );
   };
 
-  getIconShape: (props: { type: UserProfileImageShapeEnum }) => React.CSSProperties = ({ type }) => {
+  getIconShape: (props: {
+    type: UserProfileImageShapeEnum;
+  }) => React.CSSProperties = ({ type }) => {
     switch (type) {
       case "Square": {
         return {
@@ -86,13 +93,16 @@ export class RenderBasicImage extends TweetRenderImage {
       case "Hexagon": {
         return {
           borderRadius: "50%",
-          clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+          clipPath:
+            "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
         };
       }
     }
   };
 
-  textOverFlow: (props: { lineClamp: number }) => React.CSSProperties = ({ lineClamp }) => {
+  textOverFlow: (props: { lineClamp: number }) => React.CSSProperties = ({
+    lineClamp,
+  }) => {
     return {
       display: this.window ? "-webkit-box" : "block",
       WebkitLineClamp: lineClamp,
@@ -158,12 +168,20 @@ export class RenderBasicImage extends TweetRenderImage {
           <this.userRender data={data} />
           {data.tweet.card && <this.ogp data={data} />}
           <p style={{ display: "flex", margin: "0px", gap: "2px" }}>
-            <span style={{ color: this.subTextColor, fontSize: "15px" }}>{timeString}</span>
-            <span style={{ color: this.subTextColor, fontSize: "15px" }}>·</span>
-            <span style={{ color: this.subTextColor, fontSize: "15px" }}>{dateString}</span>
+            <span style={{ color: this.subTextColor, fontSize: "15px" }}>
+              {timeString}
+            </span>
+            <span style={{ color: this.subTextColor, fontSize: "15px" }}>
+              ·
+            </span>
+            <span style={{ color: this.subTextColor, fontSize: "15px" }}>
+              {dateString}
+            </span>
             {view && (
               <>
-                <span style={{ color: this.subTextColor, fontSize: "15px" }}>·</span>
+                <span style={{ color: this.subTextColor, fontSize: "15px" }}>
+                  ·
+                </span>
                 <span
                   style={{
                     color: this.textColor,
@@ -173,8 +191,12 @@ export class RenderBasicImage extends TweetRenderImage {
                 >
                   {this.toKMB(Number(view))}
                 </span>
-                <span style={{ color: this.subTextColor, fontSize: "15px" }}></span>
-                <span style={{ color: this.subTextColor, fontSize: "15px" }}>Views</span>
+                <span
+                  style={{ color: this.subTextColor, fontSize: "15px" }}
+                ></span>
+                <span style={{ color: this.subTextColor, fontSize: "15px" }}>
+                  Views
+                </span>
               </>
             )}
           </p>
@@ -184,13 +206,27 @@ export class RenderBasicImage extends TweetRenderImage {
   };
 
   ogp: TweetImageRenderType = ({ data }) => {
-    const thumbnail = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "thumbnail_image_original")?.value.imageValue;
-    const summary = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "summary_photo_image_original")?.value.imageValue;
-    const player = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "player_image_large")?.value.imageValue;
-    const title = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "title")?.value.stringValue;
-    const domain = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "domain")?.value.stringValue;
-    const vanityUrl = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "vanity_url")?.value.stringValue;
-    const description = data.tweet.card?.legacy?.bindingValues.find((v) => v.key === "description")?.value.stringValue;
+    const thumbnail = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "thumbnail_image_original"
+    )?.value.imageValue;
+    const summary = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "summary_photo_image_original"
+    )?.value.imageValue;
+    const player = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "player_image_large"
+    )?.value.imageValue;
+    const title = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "title"
+    )?.value.stringValue;
+    const domain = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "domain"
+    )?.value.stringValue;
+    const vanityUrl = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "vanity_url"
+    )?.value.stringValue;
+    const description = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "description"
+    )?.value.stringValue;
 
     // data.tweet.card?.legacy?.bindingValues.forEach((v) => {
     //     console.log(v.key, v.value);
@@ -334,7 +370,8 @@ export class RenderBasicImage extends TweetRenderImage {
         >
           {name}
         </p>
-        {(data.user.isBlueVerified || data.user.legacy.verified) && this.getBadge({ data })}
+        {(data.user.isBlueVerified || data.user.legacy.verified) &&
+          this.getBadge({ data })}
         {label && (
           <img
             style={{
@@ -361,7 +398,11 @@ export class RenderBasicImage extends TweetRenderImage {
     const videoBlank = (() => {
       const [i, blank] = getBiggerMedia(extEntities?.media ?? []);
       if (blank && this.video) {
-        const resizedMedia = getResizedMediaByWidth(blank.videoInfo!.aspectRatio[0], blank.videoInfo!.aspectRatio[1], this.width - 20 * 2);
+        const resizedMedia = getResizedMediaByWidth(
+          blank.videoInfo!.aspectRatio[0],
+          blank.videoInfo!.aspectRatio[1],
+          this.width - (this.margin + this.padding) * 2
+        );
         return (
           <div
             style={{
@@ -496,45 +537,60 @@ export class RenderBasicImage extends TweetRenderImage {
       });
     });
 
-    const normalizeRichtextTags = richtextTags.map(({ fromIndex, toIndex, richtextTypes }) => ({
-      start: normalizeMap.findIndex(({ str }) => str === fromIndex),
-      end: normalizeMap.findIndex(({ str }) => str === toIndex),
-      type: richtextTypes,
-    }));
+    const normalizeRichtextTags = richtextTags.map(
+      ({ fromIndex, toIndex, richtextTypes }) => ({
+        start: normalizeMap.findIndex(({ str }) => str === fromIndex),
+        end: normalizeMap.findIndex(({ str }) => str === toIndex),
+        type: richtextTypes,
+      })
+    );
 
     const normalizeInlineMedia = inlineMedia.map(({ index, mediaId }) => ({
       index: normalizeMap.findIndex(({ str }) => str === index),
       mediaId,
     }));
 
-    const normalizeHashtags = [...(noteEntity?.hashtags ?? []), ...(legacySet?.hashtags ?? [])].map(({ indices, tag }) => ({
+    const normalizeHashtags = [
+      ...(noteEntity?.hashtags ?? []),
+      ...(legacySet?.hashtags ?? []),
+    ].map(({ indices, tag }) => ({
       start: normalizeMap.findIndex(({ array }) => array === indices[0]),
       end: normalizeMap.findIndex(({ array }) => array === indices[1]),
       tag,
     }));
 
-    const normalizeMedia = [...(extEntities?.media ?? [])].map(({ indices, idStr, mediaUrlHttps, type }) => ({
-      start: normalizeMap.findIndex(({ array }) => array === indices[0]),
-      end: normalizeMap.findIndex(({ array }) => array === indices[1]),
-      remove: video && type !== "photo",
-      idStr,
-      mediaUrlHttps,
-    }));
-    const normalizeNoteMedia = [...(noteEntity?.media ?? [])].map(({ indices, idStr, mediaUrlHttps, type }) => ({
-      start: normalizeMap.findIndex(({ array }) => array === indices[0]),
-      end: normalizeMap.findIndex(({ array }) => array === indices[1]),
-      remove: video && type !== "photo",
-      idStr,
-      mediaUrlHttps,
-    }));
+    const normalizeMedia = [...(extEntities?.media ?? [])].map(
+      ({ indices, idStr, mediaUrlHttps, type }) => ({
+        start: normalizeMap.findIndex(({ array }) => array === indices[0]),
+        end: normalizeMap.findIndex(({ array }) => array === indices[1]),
+        remove: video && type !== "photo",
+        idStr,
+        mediaUrlHttps,
+      })
+    );
+    const normalizeNoteMedia = [...(noteEntity?.media ?? [])].map(
+      ({ indices, idStr, mediaUrlHttps, type }) => ({
+        start: normalizeMap.findIndex(({ array }) => array === indices[0]),
+        end: normalizeMap.findIndex(({ array }) => array === indices[1]),
+        remove: video && type !== "photo",
+        idStr,
+        mediaUrlHttps,
+      })
+    );
 
-    const normalizeUrls = [...(noteEntity?.urls ?? []), ...(legacySet?.urls ?? [])].map(({ indices, displayUrl }) => ({
+    const normalizeUrls = [
+      ...(noteEntity?.urls ?? []),
+      ...(legacySet?.urls ?? []),
+    ].map(({ indices, displayUrl }) => ({
       start: normalizeMap.findIndex(({ array }) => array === indices[0]),
       end: normalizeMap.findIndex(({ array }) => array === indices[1]),
       displayUrl,
     }));
 
-    const normalizeUserMentions = [...(noteEntity?.userMentions ?? []), ...(legacySet?.userMentions ?? [])].map(({ indices, screenName }) => ({
+    const normalizeUserMentions = [
+      ...(noteEntity?.userMentions ?? []),
+      ...(legacySet?.userMentions ?? []),
+    ].map(({ indices, screenName }) => ({
       start: normalizeMap.findIndex(({ array }) => array === indices[0]),
       end: normalizeMap.findIndex(({ array }) => array === indices[1]),
       screenName,
@@ -552,7 +608,9 @@ export class RenderBasicImage extends TweetRenderImage {
     }[] = [];
 
     normalizeMedia.forEach((m) => {
-      const inline = normalizeInlineMedia.find(({ mediaId }) => mediaId === m.idStr);
+      const inline = normalizeInlineMedia.find(
+        ({ mediaId }) => mediaId === m.idStr
+      );
 
       if (m.remove) {
         charIndices.push({
@@ -648,7 +706,9 @@ export class RenderBasicImage extends TweetRenderImage {
 
     const replacedSplit: typeof trueSplit = [];
     trueSplit.forEach(({ char, index }) => {
-      const ignore = charIndices.some(({ start, end }) => start <= index && index < end);
+      const ignore = charIndices.some(
+        ({ start, end }) => start <= index && index < end
+      );
       if (ignore) {
         const start = charIndices.find(({ start }) => start === index);
         start?.chars.forEach((c) => replacedSplit.push({ char: c, index }));
@@ -658,9 +718,21 @@ export class RenderBasicImage extends TweetRenderImage {
     });
 
     const charDataList = replacedSplit.map(({ char, index }) => {
-      const link = [...normalizeHashtags, ...normalizeUrls, ...normalizeUserMentions].some(({ start, end }) => start <= index && index < end);
-      const bold = normalizeRichtextTags.some(({ start, end, type }) => start <= index && index < end && type.includes(RichtextTypesEnum.Bold));
-      const italic = normalizeRichtextTags.some(({ start, end, type }) => start <= index && index < end && type.includes(RichtextTypesEnum.Italic));
+      const link = [
+        ...normalizeHashtags,
+        ...normalizeUrls,
+        ...normalizeUserMentions,
+      ].some(({ start, end }) => start <= index && index < end);
+      const bold = normalizeRichtextTags.some(
+        ({ start, end, type }) =>
+          start <= index && index < end && type.includes(RichtextTypesEnum.Bold)
+      );
+      const italic = normalizeRichtextTags.some(
+        ({ start, end, type }) =>
+          start <= index &&
+          index < end &&
+          type.includes(RichtextTypesEnum.Italic)
+      );
       const properties: React.CSSProperties = {
         ...(link ? { color: "#1d9bf0" } : {}),
         ...(bold ? { fontWeight: "700" } : {}),
@@ -731,10 +803,14 @@ export class RenderBasicImage extends TweetRenderImage {
 
     const textElement: React.ReactElement[] = [];
 
-    insert.filter(({ index }) => 0 == index).forEach(({ fn }) => textElement.push(fn()));
+    insert
+      .filter(({ index }) => 0 == index)
+      .forEach(({ fn }) => textElement.push(fn()));
 
     textDataList.forEach((t, i) => {
-      insert.filter(({ index }) => t.start - 1 == index).forEach(({ fn }) => textElement.push(fn()));
+      insert
+        .filter(({ index }) => t.start - 1 == index)
+        .forEach(({ fn }) => textElement.push(fn()));
 
       textElement.push(
         <p
@@ -779,7 +855,9 @@ export class RenderBasicImage extends TweetRenderImage {
         </p>
       );
 
-      insert.filter(({ index }) => t.end + 1 == index).forEach(({ fn }) => textElement.push(fn()));
+      insert
+        .filter(({ index }) => t.end + 1 == index)
+        .forEach(({ fn }) => textElement.push(fn()));
     });
 
     if (textElement.length == 0) {

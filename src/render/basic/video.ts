@@ -47,8 +47,8 @@ export class RenderBasicVideo extends TweetRenderVideo {
     const v = extMedia.filter((e) => e.type !== "photo");
     const video = v.map((e) => {
       return [...e.videoInfo!.variants].sort((a, b) => {
-        if (a.bitrate === undefined) return -1;
-        if (b.bitrate === undefined) return 1;
+        if (a.bitrate === undefined) return 1;
+        if (b.bitrate === undefined) return -1;
         return b.bitrate - a.bitrate;
       })[0];
     });
