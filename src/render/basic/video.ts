@@ -1,5 +1,8 @@
 import { FFmpegInfrastructure } from "../../infrastructure/ffmpeg";
-import { TweetRenderVideo, TweetVideoRenderType } from "../../render/base/video";
+import {
+  TweetRenderVideo,
+  TweetVideoRenderType,
+} from "../../render/base/video";
 import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils";
 
 export type RenderBasicVideoParam = {
@@ -12,9 +15,12 @@ export type RenderBasicVideoParam = {
 export class RenderBasicVideo extends TweetRenderVideo {
   width: NonNullable<RenderBasicVideoParam["width"]>;
   video: NonNullable<RenderBasicVideoParam["video"]>;
-  margin: number = 20;
+  margin: number = 30;
   padding: number = 12;
-  ffmpegAdditonalOption: NonNullable<RenderBasicVideoParam["ffmpegAdditonalOption"]>;
+  bottomPadding: number = 31;
+  ffmpegAdditonalOption: NonNullable<
+    RenderBasicVideoParam["ffmpegAdditonalOption"]
+  >;
 
   constructor(props: RenderBasicVideoParam) {
     super(props.ffmpeg);
@@ -28,7 +34,10 @@ export class RenderBasicVideo extends TweetRenderVideo {
 
     const o = (() => {
       const dir = output.substring(0, output.lastIndexOf("/")) || ".";
-      const name = output.substring(output.lastIndexOf("/") + 1, output.lastIndexOf("."));
+      const name = output.substring(
+        output.lastIndexOf("/") + 1,
+        output.lastIndexOf(".")
+      );
       const ext = output.substring(output.lastIndexOf(".") + 1);
       return { dir, name, ext };
     })();
@@ -48,7 +57,11 @@ export class RenderBasicVideo extends TweetRenderVideo {
     const title = `https://twitter.com/${screenName}/status/${id}`;
 
     const [index, blank] = getBiggerMedia(extMedia);
-    const { width, height } = getResizedMediaByWidth(blank!.videoInfo!.aspectRatio[0], blank!.videoInfo!.aspectRatio[1], this.width - (this.margin + this.padding) * 2);
+    const { width, height } = getResizedMediaByWidth(
+      blank!.videoInfo!.aspectRatio[0],
+      blank!.videoInfo!.aspectRatio[1],
+      this.width - (this.margin + this.padding) * 2
+    );
 
     const res = video.map(async ({ url }, i) => {
       const temp = `${o.dir}/temp-${o.name}-${i}.${o.ext}`;
@@ -106,15 +119,28 @@ export class RenderBasicVideo extends TweetRenderVideo {
       return `:force_original_aspect_ratio=1,pad=${width}:${height}:-1:(oh-ih)/2:color=white[v${i}]`;
     };
 
+    const overlayWidth = this.margin + this.padding;
+    const overlayHeight = `H-${
+      height + this.margin + this.padding + this.bottomPadding
+    }`;
+
     const command = this.ffmpeg.getFFmpeg();
     command.input(image);
     tempVideo.forEach((input) => command.input(input));
     command.complexFilter(
-      [`[0]scale=trunc(iw/2)*2:trunc(ih/2)*2[i]`, video.map((_, i) => `[${i + 1}]anull[a${i}]`), video.map((_, i) => `[${i + 1}]scale=${width}:${height}${pad(i)}`), `${all("v")}concat=n=${video.length}:v=1:a=0[video]`, `${all("a")}concat=n=${video.length}:v=0:a=1[audio]`, `[i][video]overlay=30:H-${height + (this.margin + this.padding) + 31}[marge]`].flat()
+      [
+        `[0]scale=trunc(iw/2)*2:trunc(ih/2)*2[i]`,
+        video.map((_, i) => `[${i + 1}]anull[a${i}]`),
+        video.map((_, i) => `[${i + 1}]scale=${width}:${height}${pad(i)}`),
+        `${all("v")}concat=n=${video.length}:v=1:a=0[video]`,
+        `${all("a")}concat=n=${video.length}:v=0:a=1[audio]`,
+        `[i][video]overlay=${overlayWidth}:${overlayHeight}[marge]`,
+      ].flat()
     );
     command.map("[marge]");
     command.map("[audio]");
-    const comment = "Snapped by twitter-snap-core https://github.com/fa0311/twitter-snap-core";
+    const comment =
+      "Snapped by twitter-snap-core https://github.com/fa0311/twitter-snap-core";
 
     command.addOption("-metadata", `title=${title}`);
     command.addOption("-metadata", `comment=${comment}`);
