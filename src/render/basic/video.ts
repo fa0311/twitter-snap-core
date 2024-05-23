@@ -114,11 +114,6 @@ export class RenderBasicVideo extends TweetRenderVideo {
       return `${video.map((_, i) => `[${e}${i}]`).join("")}`;
     };
 
-    const pad = (i: number): string => {
-      if (i === index) return `[v${i}]`;
-      return `:force_original_aspect_ratio=1,pad=${width}:${height}:-1:(oh-ih)/2:color=white[v${i}]`;
-    };
-
     const overlayWidth = this.margin + this.padding;
     const overlayHeight = `H-${
       height + this.margin + this.padding + this.bottomPadding
@@ -127,11 +122,14 @@ export class RenderBasicVideo extends TweetRenderVideo {
     const command = this.ffmpeg.getFFmpeg();
     command.input(image);
     tempVideo.forEach((input) => command.input(input));
+    
+    const normalize = `scale=trunc(ih*dar/2)*2:trunc(ih/2)*2,setsar=1/1`
+    const pad = `scale=w=${width}:h=${height}:force_original_aspect_ratio=1,pad=w=${width}:h=${height}:x=(ow-iw)/2:y=(oh-ih)/2:color=white`
     command.complexFilter(
       [
         `[0]scale=trunc(iw/2)*2:trunc(ih/2)*2[i]`,
         video.map((_, i) => `[${i + 1}]anull[a${i}]`),
-        video.map((_, i) => `[${i + 1}]scale=${width}:${height}${pad(i)}`),
+        video.map((_, i) => `[${i + 1}]${pad},${normalize}[v${i}]`),
         `${all("v")}concat=n=${video.length}:v=1:a=0[video]`,
         `${all("a")}concat=n=${video.length}:v=0:a=1[audio]`,
         `[i][video]overlay=${overlayWidth}:${overlayHeight}[marge]`,
