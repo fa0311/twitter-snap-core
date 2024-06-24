@@ -13,12 +13,15 @@ export type RenderBasicImageParam = {
   video?: boolean;
   gradient: string;
   backgroundColor: string;
+  subBackgroundColor: string;
   textColor: string;
   subTextColor: string;
   borderColor: string;
   imageBorderColor: string;
   boxShadow: string;
+  cardSuffix: string;
   fontFamily?: string;
+  rawAssetsUrl?: string;
 };
 
 type TweetImageRenderGenericsType<T> = (
@@ -34,12 +37,15 @@ export class RenderBasicImage extends TweetRenderImage {
   video: NonNullable<RenderBasicImageParam["video"]>;
   gradient: NonNullable<RenderBasicImageParam["gradient"]>;
   backgroundColor: NonNullable<RenderBasicImageParam["backgroundColor"]>;
+  subBackgroundColor: NonNullable<RenderBasicImageParam["subBackgroundColor"]>;
   textColor: NonNullable<RenderBasicImageParam["textColor"]>;
   subTextColor: NonNullable<RenderBasicImageParam["subTextColor"]>;
   borderColor: NonNullable<RenderBasicImageParam["borderColor"]>;
   imageBorderColor: NonNullable<RenderBasicImageParam["imageBorderColor"]>;
   boxShadow: NonNullable<RenderBasicImageParam["boxShadow"]>;
+  cardSuffix: NonNullable<RenderBasicImageParam["cardSuffix"]>;
   fontFamily: NonNullable<RenderBasicImageParam["fontFamily"]>;
+  rawAssetsUrl: NonNullable<string>;
   margin: number = 30;
   padding: number = 12;
 
@@ -49,23 +55,27 @@ export class RenderBasicImage extends TweetRenderImage {
     this.video = props.video ?? false;
     this.gradient = props.gradient;
     this.backgroundColor = props.backgroundColor;
+    this.subBackgroundColor = props.subBackgroundColor;
     this.textColor = props.textColor;
     this.subTextColor = props.subTextColor;
     this.borderColor = props.borderColor;
     this.imageBorderColor = props.imageBorderColor;
     this.boxShadow = props.boxShadow;
+    this.cardSuffix = props.cardSuffix;
     this.fontFamily =
       props.fontFamily ?? "Segoe UI,Meiryo,system-ui,sans-serif";
+    this.rawAssetsUrl =
+      "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets";
   }
 
   getBadge: TweetImageRenderType = ({ data }) => {
     const src = (() => {
       if (data.user.legacy.verifiedType === "Business") {
-        return "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gold-badge.png";
+        return `${this.rawAssetsUrl}/twitter/gold-badge.png`;
       } else if (data.user.legacy.verifiedType === "Government") {
-        return "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/gray-badge.png";
+        return `${this.rawAssetsUrl}/twitter/gray-badge.png`;
       } else {
-        return "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets/twitter/blue-badge.png";
+        return `${this.rawAssetsUrl}/twitter/blue-badge.png`;
       }
     })();
     return (
@@ -78,6 +88,10 @@ export class RenderBasicImage extends TweetRenderImage {
         src={src}
       />
     );
+  };
+
+  getCard = () => {
+    return `${this.rawAssetsUrl}/twitter/card${this.cardSuffix}.png`;
   };
 
   getIconShape: (props: {
@@ -284,19 +298,13 @@ export class RenderBasicImage extends TweetRenderImage {
         </div>
       );
     }
-    if (player || thumbnail) {
-      const size = 129;
-      const url = player?.url ?? thumbnail?.url;
 
-      return (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            borderRadius: "10px",
-            border: `1px solid ${this.borderColor}`,
-          }}
-        >
+    const size = 129;
+    const url = player?.url ?? thumbnail?.url;
+
+    const img = (() => {
+      if (url) {
+        return (
           <img
             style={{
               width: size,
@@ -307,52 +315,87 @@ export class RenderBasicImage extends TweetRenderImage {
             }}
             src={url}
           />
+        );
+      } else {
+        return (
           <div
             style={{
-              padding: "12px",
+              width: size,
+              height: size,
               display: "flex",
-              flexDirection: "column",
-              gap: "2px",
               justifyContent: "center",
-              width: this.width - (this.margin + this.padding) * 2 - size,
+              alignItems: "center",
+              borderRadius: "10px 0px 0px 10px",
+              borderRight: `1px solid ${this.borderColor}`,
+              background: this.subBackgroundColor,
             }}
           >
-            <p
+            <img
               style={{
-                widows: "100%",
-                fontSize: "15px",
-                margin: "0px",
-                color: this.subTextColor,
-                ...this.textOverFlow({ lineClamp: 1 }),
+                width: "30px",
+                height: "30px",
               }}
-            >
-              {vanityUrl}
-            </p>
-            <p
-              style={{
-                fontSize: "15px",
-                margin: "0px",
-                color: this.textColor,
-                ...this.textOverFlow({ lineClamp: 1 }),
-              }}
-            >
-              {title}
-            </p>
-            <p
-              style={{
-                fontSize: "15px",
-                margin: "0px",
-                color: this.subTextColor,
-                ...this.textOverFlow({ lineClamp: 2 }),
-              }}
-            >
-              {description}
-            </p>
+              src={this.getCard()}
+            />
           </div>
+        );
+      }
+    })();
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          borderRadius: "10px",
+          border: `1px solid ${this.borderColor}`,
+        }}
+      >
+        {img}
+        <div
+          style={{
+            padding: "12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "2px",
+            justifyContent: "center",
+            width: this.width - (this.margin + this.padding) * 2 - size,
+          }}
+        >
+          <p
+            style={{
+              widows: "100%",
+              fontSize: "15px",
+              margin: "0px",
+              color: this.subTextColor,
+              ...this.textOverFlow({ lineClamp: 1 }),
+            }}
+          >
+            {vanityUrl}
+          </p>
+          <p
+            style={{
+              fontSize: "15px",
+              margin: "0px",
+              color: this.textColor,
+              ...this.textOverFlow({ lineClamp: 1 }),
+            }}
+          >
+            {title}
+          </p>
+          <p
+            style={{
+              fontSize: "15px",
+              margin: "0px",
+              color: this.subTextColor,
+              ...this.textOverFlow({ lineClamp: 2 }),
+            }}
+          >
+            {description}
+          </p>
         </div>
-      );
-    }
-    throw new Error("OGP not found");
+      </div>
+    );
   };
 
   username: TweetImageRenderType = ({ data }) => {

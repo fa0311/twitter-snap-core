@@ -7,11 +7,13 @@ export type RenderColorImageParam = {
 
 const omitList = [
   "backgroundColor",
+  "subBackgroundColor",
   "textColor",
   "subTextColor",
   "borderColor",
   "imageBorderColor",
   "boxShadow",
+  "cardSuffix",
 ] as const;
 
 type RenderColorBaseImageParamOmit = Omit<
@@ -43,10 +45,12 @@ export class RenderColorBaseImage extends RenderBasicImage {
       ...props,
       boxShadow: boxShadow,
       backgroundColor: props.dark ? "#000000" : "#ffffff",
+      subBackgroundColor: props.dark ? "#16181c" : "#f7f9f9",
       textColor: props.dark ? "#ffffff" : "#000000",
       subTextColor: props.dark ? "#71767b" : "#536471",
       borderColor: props.dark ? "#2f3336" : "#cfd9de",
       imageBorderColor: props.dark ? "#000000" : "#e6e6e6",
+      cardSuffix: props.dark ? "-dark" : "",
     });
   }
 }
