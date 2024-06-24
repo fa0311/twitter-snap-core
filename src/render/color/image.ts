@@ -13,10 +13,15 @@ const omitList = [
   "imageBorderColor",
   "boxShadow",
 ] as const;
-export type RenderColorBaseImageParam = Omit<
+
+type RenderColorBaseImageParamOmit = Omit<
   RenderBasicImageParam,
   (typeof omitList)[number]
-> & { dark: boolean; shadow: "none" | "dark" | "light" };
+>;
+export type RenderColorBaseImageParam = RenderColorBaseImageParamOmit & {
+  dark: boolean;
+  shadow: "none" | "dark" | "light";
+};
 
 const none = "#ffffff00";
 

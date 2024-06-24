@@ -18,6 +18,7 @@ export type RenderBasicImageParam = {
   borderColor: string;
   imageBorderColor: string;
   boxShadow: string;
+  fontFamily?: string;
 };
 
 type TweetImageRenderGenericsType<T> = (
@@ -38,6 +39,7 @@ export class RenderBasicImage extends TweetRenderImage {
   borderColor: NonNullable<RenderBasicImageParam["borderColor"]>;
   imageBorderColor: NonNullable<RenderBasicImageParam["imageBorderColor"]>;
   boxShadow: NonNullable<RenderBasicImageParam["boxShadow"]>;
+  fontFamily: NonNullable<RenderBasicImageParam["fontFamily"]>;
   margin: number = 30;
   padding: number = 12;
 
@@ -52,6 +54,8 @@ export class RenderBasicImage extends TweetRenderImage {
     this.borderColor = props.borderColor;
     this.imageBorderColor = props.imageBorderColor;
     this.boxShadow = props.boxShadow;
+    this.fontFamily =
+      props.fontFamily ?? "Segoe UI,Meiryo,system-ui,sans-serif";
   }
 
   getBadge: TweetImageRenderType = ({ data }) => {
@@ -151,6 +155,7 @@ export class RenderBasicImage extends TweetRenderImage {
           height: "100%",
           padding: this.margin,
           background: this.gradient,
+          fontFamily: this.fontFamily,
         }}
       >
         <div

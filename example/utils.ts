@@ -13,6 +13,10 @@ type ResType = {
   segoeui600i: ArrayBuffer;
   segoeui700i: ArrayBuffer;
   segoeui800i: ArrayBuffer;
+  meiryo500: ArrayBuffer;
+  meiryo700: ArrayBuffer;
+  meiryo500i: ArrayBuffer;
+  meiryo700i: ArrayBuffer;
 };
 
 export const getFont = async (): Promise<ResType> => {
@@ -32,6 +36,10 @@ export const getFont = async (): Promise<ResType> => {
     ["SEGUISBI.TTF", "segoeui", 600, "italic"],
     ["SEGOEUIZ.TTF", "segoeui", 700, "italic"],
     ["SEGUIBLI.TTF", "segoeui", 800, "italic"],
+    ["Meiryo.ttf", "meiryo", 500, "normal"],
+    ["Meiryo-Bold.ttf", "meiryo", 700, "normal"],
+    ["Meiryo-Italic.ttf", "meiryo", 500, "italic"],
+    ["Meiryo-BoldItalic.ttf", "meiryo", 700, "italic"],
   ];
 
   const fonts = list.map(async ([file, name, weight, style]) => {
