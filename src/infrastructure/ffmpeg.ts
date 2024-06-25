@@ -1,8 +1,13 @@
 import { default as ffmpeg, default as ffprobe } from "fluent-ffmpeg";
 export type GetFFmpegType = () => ffmpeg.FfmpegCommand;
-export type DumpCommandType = (prefix: string, command: ffmpeg.FfmpegCommand) => void;
+export type DumpCommandType = (
+  prefix: string,
+  command: ffmpeg.FfmpegCommand
+) => void;
 export type RunFFmpegType = (command: ffmpeg.FfmpegCommand) => Promise<unknown>;
-export type RunFFprobeType = (command: ffprobe.FfmpegCommand) => Promise<ffmpeg.FfprobeData>;
+export type RunFFprobeType = (
+  command: ffprobe.FfmpegCommand
+) => Promise<ffmpeg.FfprobeData>;
 
 export class FFmpegInfrastructure {
   ffmpegPath: string;
@@ -12,9 +17,26 @@ export class FFmpegInfrastructure {
   static ffprobeDefaultPath = "ffprobe";
 
   constructor(args?: { ffmpegPath?: string; ffprobePath?: string }) {
-    this.ffmpegPath = args?.ffmpegPath ?? FFmpegInfrastructure.ffmpegDefaultPath;
-    this.ffprobePath = args?.ffprobePath ?? FFmpegInfrastructure.ffprobeDefaultPath;
+    this.ffmpegPath =
+      args?.ffmpegPath ?? FFmpegInfrastructure.ffmpegDefaultPath;
+    this.ffprobePath =
+      args?.ffprobePath ?? FFmpegInfrastructure.ffprobeDefaultPath;
   }
+
+  bypass(command: ffmpeg.FfmpegCommand) {
+    const bk = command.availableFormats;
+    command.availableFormats = (cb: (err: any, data: any) => void) => {
+      bk.bind(command)((err, data) => {
+        const lavfi = {
+          canDemux: true,
+          canMux: true,
+          description: "Lavfi",
+        };
+        cb(err, { ...data, lavfi });
+      });
+    };
+  }
+
   getFFmpeg: GetFFmpegType = () => {
     return ffmpeg().setFfmpegPath(this.ffmpegPath);
   };
@@ -32,6 +54,7 @@ export class FFmpegInfrastructure {
   };
 
   runMpeg: RunFFmpegType = (command) => {
+    this.bypass(command);
     this.dumpCommand("ffmpeg", command);
     return new Promise((resolve, reject) => {
       command.on("end", resolve);
@@ -41,6 +64,7 @@ export class FFmpegInfrastructure {
   };
 
   runProbe: RunFFprobeType = (command) => {
+    this.bypass(command);
     this.dumpCommand("ffprobe", command);
     return new Promise((resolve, reject) => {
       command.ffprobe((err, data) => {

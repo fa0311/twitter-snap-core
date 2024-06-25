@@ -10,6 +10,7 @@ import { TweetImageRenderType, TweetRenderImage } from "../base/image";
 
 export type RenderBasicImageParam = {
   width: number;
+  scale?: number;
   video?: boolean;
   gradient: string;
   backgroundColor: string;
@@ -34,6 +35,7 @@ type TweetImageRenderQuotedType = TweetImageRenderGenericsType<{
 export class RenderBasicImage extends TweetRenderImage {
   /*  基本のテーマの基底クラス */
   width: NonNullable<RenderBasicImageParam["width"]>;
+  scale: NonNullable<RenderBasicImageParam["scale"]>;
   video: NonNullable<RenderBasicImageParam["video"]>;
   gradient: NonNullable<RenderBasicImageParam["gradient"]>;
   backgroundColor: NonNullable<RenderBasicImageParam["backgroundColor"]>;
@@ -52,6 +54,7 @@ export class RenderBasicImage extends TweetRenderImage {
   constructor(props: RenderBasicImageParam) {
     super();
     this.width = props.width;
+    this.scale = props.scale ?? 1;
     this.video = props.video ?? false;
     this.gradient = props.gradient;
     this.backgroundColor = props.backgroundColor;
@@ -68,7 +71,18 @@ export class RenderBasicImage extends TweetRenderImage {
       "https://raw.githubusercontent.com/fa0311/twitter-snap-core/main/assets";
   }
 
-  getBadge: TweetImageRenderType = ({ data }) => {
+  applyScaleNum(value: number): number {
+    return Math.floor(value * this.scale);
+  }
+  applyScale(value: number): string {
+    return this.applyScaleNum(value) + "px";
+  }
+
+  applyScales(value: number[]): string {
+    return value.map((v) => this.applyScale(v)).join(" ");
+  }
+
+  getBadgeWidget: TweetImageRenderType = ({ data }) => {
     const src = (() => {
       if (data.user.legacy.verifiedType === "Business") {
         return `${this.rawAssetsUrl}/twitter/gold-badge.png`;
@@ -81,26 +95,26 @@ export class RenderBasicImage extends TweetRenderImage {
     return (
       <img
         style={{
-          width: "15px",
-          height: "15px",
-          marginTop: "4px",
+          width: this.applyScale(15),
+          height: this.applyScale(15),
+          marginTop: this.applyScale(4),
         }}
         src={src}
       />
     );
   };
 
-  getCard = () => {
+  getCardURL = () => {
     return `${this.rawAssetsUrl}/twitter/card${this.cardSuffix}.png`;
   };
 
-  getIconShape: (props: {
+  getIconShapeWidget: (props: {
     type: UserProfileImageShapeEnum;
   }) => React.CSSProperties = ({ type }) => {
     switch (type) {
       case "Square": {
         return {
-          borderRadius: "4px",
+          borderRadius: 4,
         };
       }
       case "Circle": {
@@ -111,14 +125,17 @@ export class RenderBasicImage extends TweetRenderImage {
       case "Hexagon": {
         return {
           borderRadius: "50%",
-          clipPath:
-            "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
         };
+        // return {
+        //   borderRadius: "50%",
+        //   clipPath:
+        //     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+        // };
       }
     }
   };
 
-  textOverFlow: (props: { lineClamp: number }) => React.CSSProperties = ({
+  textOverFlowCSS: (props: { lineClamp: number }) => React.CSSProperties = ({
     lineClamp,
   }) => {
     return {
@@ -145,7 +162,42 @@ export class RenderBasicImage extends TweetRenderImage {
   };
 
   render: TweetImageRenderType = ({ data }) => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          padding: this.applyScale(this.margin),
+          background: this.gradient,
+          fontFamily: this.fontFamily,
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            background: this.backgroundColor,
+            display: "flex",
+            flexDirection: "column",
+            borderRadius: this.applyScale(10),
+            padding: this.applyScale(this.padding),
+            gap: this.applyScale(12),
+            boxShadow: this.boxShadow,
+          }}
+        >
+          <this.userRender data={data} />
+          {data.tweet.card && <this.ogp data={data} />}
+          <this.bottonWidget data={data} />
+        </div>
+      </div>
+    );
+  };
+
+  bottonWidget: TweetImageRenderType = ({ data }) => {
     const time = data.tweet.legacy!.createdAt;
+
     const timeString = new Date(time).toLocaleString("en-US", {
       hour: "numeric",
       minute: "numeric",
@@ -157,70 +209,43 @@ export class RenderBasicImage extends TweetRenderImage {
       day: "numeric",
       year: "numeric",
     });
-
     const view = data.tweet.views?.count;
+    const font = this.applyScale(15);
+
     return (
-      <div
+      <p
         style={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          height: "100%",
-          padding: this.margin,
-          background: this.gradient,
-          fontFamily: this.fontFamily,
+          margin: this.applyScale(0),
+          gap: this.applyScale(2),
         }}
       >
-        <div
-          style={{
-            width: "100%",
-            background: this.backgroundColor,
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: "10px",
-            padding: this.padding,
-            gap: "12px",
-            boxShadow: this.boxShadow,
-          }}
-        >
-          <this.userRender data={data} />
-          {data.tweet.card && <this.ogp data={data} />}
-          <p style={{ display: "flex", margin: "0px", gap: "2px" }}>
-            <span style={{ color: this.subTextColor, fontSize: "15px" }}>
-              {timeString}
+        <span style={{ color: this.subTextColor, fontSize: font }}>
+          {timeString}
+        </span>
+        <span style={{ color: this.subTextColor, fontSize: font }}>·</span>
+        <span style={{ color: this.subTextColor, fontSize: font }}>
+          {dateString}
+        </span>
+        {view && (
+          <>
+            <span style={{ color: this.subTextColor, fontSize: font }}>·</span>
+            <span
+              style={{
+                color: this.textColor,
+                fontSize: font,
+                fontWeight: "700",
+              }}
+            >
+              {this.toKMB(Number(view))}
             </span>
-            <span style={{ color: this.subTextColor, fontSize: "15px" }}>
-              ·
+            <span style={{ color: this.subTextColor, fontSize: font }}></span>
+            <span style={{ color: this.subTextColor, fontSize: font }}>
+              Views
             </span>
-            <span style={{ color: this.subTextColor, fontSize: "15px" }}>
-              {dateString}
-            </span>
-            {view && (
-              <>
-                <span style={{ color: this.subTextColor, fontSize: "15px" }}>
-                  ·
-                </span>
-                <span
-                  style={{
-                    color: this.textColor,
-                    fontSize: "15px",
-                    fontWeight: "700",
-                  }}
-                >
-                  {this.toKMB(Number(view))}
-                </span>
-                <span
-                  style={{ color: this.subTextColor, fontSize: "15px" }}
-                ></span>
-                <span style={{ color: this.subTextColor, fontSize: "15px" }}>
-                  Views
-                </span>
-              </>
-            )}
-          </p>
-        </div>
-      </div>
+          </>
+        )}
+      </p>
     );
   };
 
@@ -258,28 +283,28 @@ export class RenderBasicImage extends TweetRenderImage {
             <img
               style={{
                 width: "100%",
-                borderRadius: "10px",
-                border: `1px solid ${this.imageBorderColor}`,
+                borderRadius: this.applyScale(10),
+                border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
               }}
               src={summary.url}
             />
             <div
               style={{
                 position: "absolute",
-                bottom: "12px",
-                left: "12px",
-                right: "12px",
+                bottom: this.applyScale(12),
+                left: this.applyScale(12),
+                right: this.applyScale(12),
                 display: "flex",
               }}
             >
               <p
                 style={{
-                  fontSize: "13px",
-                  padding: "0px 4px",
+                  fontSize: this.applyScale(13),
+                  padding: this.applyScales([0, 4]),
                   background: "#000000c4",
                   color: "#ffffff",
-                  borderRadius: "4px",
-                  ...this.textOverFlow({ lineClamp: 1 }),
+                  borderRadius: this.applyScale(4),
+                  ...this.textOverFlowCSS({ lineClamp: 1 }),
                 }}
               >
                 {title}
@@ -288,8 +313,8 @@ export class RenderBasicImage extends TweetRenderImage {
           </div>
           <p
             style={{
-              fontSize: "13px",
-              margin: "0px",
+              fontSize: this.applyScale(13),
+              margin: this.applyScale(0),
               color: this.subTextColor,
             }}
           >
@@ -307,11 +332,11 @@ export class RenderBasicImage extends TweetRenderImage {
         return (
           <img
             style={{
-              width: size,
-              height: size,
-              borderRadius: "10px 0px 0px 10px",
+              width: this.applyScale(size),
+              height: this.applyScale(size),
+              borderRadius: this.applyScales([10, 0, 0, 10]),
               objectFit: "cover",
-              borderRight: `1px solid ${this.borderColor}`,
+              borderRight: `${this.applyScale(1)}  solid ${this.borderColor}`,
             }}
             src={url}
           />
@@ -325,17 +350,17 @@ export class RenderBasicImage extends TweetRenderImage {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: "10px 0px 0px 10px",
-              borderRight: `1px solid ${this.borderColor}`,
+              borderRadius: this.applyScales([10, 0, 0, 10]),
+              borderRight: `${this.applyScale(1)} solid ${this.borderColor}`,
               background: this.subBackgroundColor,
             }}
           >
             <img
               style={{
-                width: "30px",
-                height: "30px",
+                width: this.applyScale(30),
+                height: this.applyScale(30),
               }}
-              src={this.getCard()}
+              src={this.getCardURL()}
             />
           </div>
         );
@@ -347,48 +372,50 @@ export class RenderBasicImage extends TweetRenderImage {
         style={{
           display: "flex",
           flexDirection: "row",
-          borderRadius: "10px",
-          border: `1px solid ${this.borderColor}`,
+          borderRadius: this.applyScale(10),
+          border: `${this.applyScale(1)} solid ${this.borderColor}`,
         }}
       >
         {img}
         <div
           style={{
-            padding: "12px",
+            padding: this.applyScale(12),
             display: "flex",
             flexDirection: "column",
-            gap: "2px",
+            gap: this.applyScale(2),
             justifyContent: "center",
-            width: this.width - (this.margin + this.padding) * 2 - size,
+            width: this.applyScale(
+              this.width - (this.margin + this.padding) * 2 - size
+            ),
           }}
         >
           <p
             style={{
               widows: "100%",
-              fontSize: "15px",
-              margin: "0px",
+              fontSize: this.applyScale(15),
+              margin: this.applyScale(0),
               color: this.subTextColor,
-              ...this.textOverFlow({ lineClamp: 1 }),
+              ...this.textOverFlowCSS({ lineClamp: 1 }),
             }}
           >
             {vanityUrl}
           </p>
           <p
             style={{
-              fontSize: "15px",
-              margin: "0px",
+              fontSize: this.applyScale(15),
+              margin: this.applyScale(0),
               color: this.textColor,
-              ...this.textOverFlow({ lineClamp: 1 }),
+              ...this.textOverFlowCSS({ lineClamp: 1 }),
             }}
           >
             {title}
           </p>
           <p
             style={{
-              fontSize: "15px",
-              margin: "0px",
+              fontSize: this.applyScale(15),
+              margin: this.applyScale(0),
               color: this.subTextColor,
-              ...this.textOverFlow({ lineClamp: 2 }),
+              ...this.textOverFlowCSS({ lineClamp: 2 }),
             }}
           >
             {description}
@@ -405,13 +432,13 @@ export class RenderBasicImage extends TweetRenderImage {
       <div
         style={{
           display: "flex",
-          gap: "4px",
+          gap: this.applyScale(4),
         }}
       >
         <p
           style={{
-            margin: "0px",
-            fontSize: "15px",
+            margin: this.applyScale(0),
+            fontSize: this.applyScale(15),
             fontWeight: "700",
             color: this.textColor,
           }}
@@ -419,14 +446,14 @@ export class RenderBasicImage extends TweetRenderImage {
           {name}
         </p>
         {(data.user.isBlueVerified || data.user.legacy.verified) &&
-          this.getBadge({ data })}
+          this.getBadgeWidget({ data })}
         {label && (
           <img
             style={{
-              width: "15px",
-              height: "15px",
-              border: `1px solid ${this.imageBorderColor}`,
-              marginTop: "4px",
+              width: this.applyScale(15),
+              height: this.applyScale(15),
+              border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
+              marginTop: this.applyScale(4),
             }}
             src={label}
           />
@@ -436,7 +463,9 @@ export class RenderBasicImage extends TweetRenderImage {
   };
 
   userRender: TweetImageRenderType = ({ data }) => {
-    const icon = data.user.legacy.profileImageUrlHttps;
+    const reg = [/_[a-z]+\.([a-z]+)$/, "_400x400.$1"] as const;
+    const icon = data.user.legacy.profileImageUrlHttps.replace(...reg);
+
     const name = data.user.legacy.name;
     const id = data.user.legacy.screenName;
 
@@ -449,7 +478,7 @@ export class RenderBasicImage extends TweetRenderImage {
         const resizedMedia = getResizedMediaByWidth(
           blank.videoInfo!.aspectRatio[0],
           blank.videoInfo!.aspectRatio[1],
-          this.width - (this.margin + this.padding) * 2
+          this.width - this.applyScaleNum((this.margin + this.padding) * 2)
         );
         return (
           <div
@@ -464,15 +493,27 @@ export class RenderBasicImage extends TweetRenderImage {
     })();
 
     return (
-      <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
-        <div style={{ display: "flex", gap: "2px", alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: this.applyScale(10),
+          flexDirection: "column",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            gap: this.applyScale(2),
+            alignItems: "center",
+          }}
+        >
           <img
             alt="icon"
             style={{
-              width: "40px",
-              height: "40px",
-              margin: "4px",
-              ...this.getIconShape({ type: data.user.profileImageShape }),
+              width: this.applyScale(40),
+              height: this.applyScale(40),
+              margin: this.applyScale(4),
+              ...this.getIconShapeWidget({ type: data.user.profileImageShape }),
             }}
             src={icon}
           />
@@ -480,8 +521,8 @@ export class RenderBasicImage extends TweetRenderImage {
             {this.username({ data })}
             <p
               style={{
-                fontSize: "15px",
-                margin: "0px",
+                fontSize: this.applyScale(15),
+                margin: this.applyScale(0),
                 color: this.subTextColor,
               }}
             >
@@ -493,9 +534,9 @@ export class RenderBasicImage extends TweetRenderImage {
         {data.quoted && (
           <div
             style={{
-              border: `1px solid ${this.imageBorderColor}`,
-              borderRadius: "16px",
-              padding: "10px",
+              border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
+              borderRadius: this.applyScale(16),
+              padding: this.applyScale(10),
               display: "flex",
             }}
           >
@@ -512,15 +553,21 @@ export class RenderBasicImage extends TweetRenderImage {
     const name = data.user.legacy.name;
     const id = data.user.legacy.screenName;
     return (
-      <div style={{ display: "flex", gap: "2px", flexDirection: "column" }}>
-        <div style={{ display: "flex", gap: "2px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: this.applyScale(2),
+          flexDirection: "column",
+        }}
+      >
+        <div style={{ display: "flex", gap: this.applyScale(2) }}>
           <img
             alt="icon"
             style={{
-              width: "24px",
-              height: "24px",
-              margin: "4px",
-              ...this.getIconShape({ type: data.user.profileImageShape }),
+              width: this.applyScale(24),
+              height: this.applyScale(24),
+              margin: this.applyScale(4),
+              ...this.getIconShapeWidget({ type: data.user.profileImageShape }),
             }}
             src={icon}
           />
@@ -528,14 +575,14 @@ export class RenderBasicImage extends TweetRenderImage {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "6px",
+              gap: this.applyScale(6),
             }}
           >
             {this.username({ data })}
             <p
               style={{
-                fontSize: "15px",
-                margin: "0px",
+                fontSize: this.applyScale(15),
+                margin: this.applyScale(0),
                 color: this.subTextColor,
               }}
             >
@@ -675,8 +722,8 @@ export class RenderBasicImage extends TweetRenderImage {
               alt="img"
               style={{
                 width: "100%",
-                borderRadius: "10px",
-                border: `1px solid ${this.imageBorderColor}`,
+                borderRadius: this.applyScale(10),
+                border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
               }}
               src={m.mediaUrlHttps}
             />
@@ -691,8 +738,8 @@ export class RenderBasicImage extends TweetRenderImage {
               alt="img"
               style={{
                 width: "100%",
-                borderRadius: "10px",
-                border: `1px solid ${this.imageBorderColor}`,
+                borderRadius: this.applyScale(10),
+                border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
               }}
               src={m.mediaUrlHttps}
             />
@@ -712,9 +759,9 @@ export class RenderBasicImage extends TweetRenderImage {
               alt="img"
               style={{
                 width: "100%",
-                borderRadius: "10px",
-                border: `1px solid ${this.imageBorderColor}`,
-                marginTop: "12px",
+                borderRadius: this.applyScale(10),
+                border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
+                marginTop: this.applyScale(12),
               }}
               src={m.mediaUrlHttps}
             />
@@ -864,8 +911,8 @@ export class RenderBasicImage extends TweetRenderImage {
         <p
           key={i}
           style={{
-            fontSize: quoted ? "14px " : "17px",
-            margin: "0px",
+            fontSize: quoted ? this.applyScale(14) : this.applyScale(17),
+            margin: this.applyScale(0),
             width: "100%",
             display: "flex",
             flexWrap: "wrap",

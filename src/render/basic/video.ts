@@ -8,12 +8,14 @@ import { getBiggerMedia, getResizedMediaByWidth } from "../../utils/utils";
 export type RenderBasicVideoParam = {
   ffmpeg?: FFmpegInfrastructure;
   width: number;
+  scale?: number;
   video?: boolean;
   ffmpegAdditonalOption?: string[];
 };
 
 export class RenderBasicVideo extends TweetRenderVideo {
   width: NonNullable<RenderBasicVideoParam["width"]>;
+  scale: NonNullable<RenderBasicVideoParam["scale"]>;
   video: NonNullable<RenderBasicVideoParam["video"]>;
   margin: number = 30;
   padding: number = 12;
@@ -25,8 +27,13 @@ export class RenderBasicVideo extends TweetRenderVideo {
   constructor(props: RenderBasicVideoParam) {
     super(props.ffmpeg);
     this.width = props.width;
+    this.scale = props.scale ?? 1;
     this.video = props.video ?? false;
     this.ffmpegAdditonalOption = props.ffmpegAdditonalOption ?? [];
+  }
+
+  applyScaleNum(value: number): number {
+    return Math.floor(value * this.scale);
   }
 
   render: TweetVideoRenderType = async ({ data, image, output }) => {
@@ -60,7 +67,7 @@ export class RenderBasicVideo extends TweetRenderVideo {
     const { width, height } = getResizedMediaByWidth(
       blank!.videoInfo!.aspectRatio[0],
       blank!.videoInfo!.aspectRatio[1],
-      this.width - (this.margin + this.padding) * 2
+      this.width - this.applyScaleNum((this.margin + this.padding) * 2)
     );
 
     const res = video.map(async ({ url }, i) => {
@@ -114,17 +121,18 @@ export class RenderBasicVideo extends TweetRenderVideo {
       return `${video.map((_, i) => `[${e}${i}]`).join("")}`;
     };
 
-    const overlayWidth = this.margin + this.padding;
+    const overlayWidth = this.applyScaleNum(this.margin + this.padding);
     const overlayHeight = `H-${
-      height + this.margin + this.padding + this.bottomPadding
+      height +
+      this.applyScaleNum(this.margin + this.padding + this.bottomPadding)
     }`;
 
     const command = this.ffmpeg.getFFmpeg();
     command.input(image);
     tempVideo.forEach((input) => command.input(input));
-    
-    const normalize = `scale=trunc(ih*dar/2)*2:trunc(ih/2)*2,setsar=1/1`
-    const pad = `scale=w=${width}:h=${height}:force_original_aspect_ratio=1,pad=w=${width}:h=${height}:x=(ow-iw)/2:y=(oh-ih)/2:color=white`
+
+    const normalize = `scale=trunc(ih*dar/2)*2:trunc(ih/2)*2,setsar=1/1`;
+    const pad = `scale=w=${width}:h=${height}:force_original_aspect_ratio=1,pad=w=${width}:h=${height}:x=(ow-iw)/2:y=(oh-ih)/2:color=white`;
     command.complexFilter(
       [
         `[0]scale=trunc(iw/2)*2:trunc(ih/2)*2[i]`,

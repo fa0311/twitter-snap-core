@@ -4,14 +4,21 @@ import { TweetImageRenderType, TweetRenderImage } from "../base/image";
 
 export type RenderMakeItAQuoteImageParam = {
   width: number;
+  scale?: number;
 };
 
 export class RenderMakeItAQuoteImage extends TweetRenderImage {
   width: NonNullable<RenderMakeItAQuoteImageParam["width"]>;
+  scale: NonNullable<RenderMakeItAQuoteImageParam["scale"]>;
 
   constructor(props: RenderMakeItAQuoteImageParam) {
     super();
     this.width = props.width;
+    this.scale = props.scale ?? 1;
+  }
+
+  applyScale(value: number): string {
+    return value * this.scale + "px";
   }
 
   textAlign: () => React.CSSProperties = () => {
@@ -23,7 +30,8 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
   };
 
   render: TweetImageRenderType = ({ data }) => {
-    const icon = data.user.legacy.profileImageUrlHttps.replace(/_normal.jpg$/, "_400x400.jpg");
+    const reg = [/_[a-z]+\.([a-z]+)$/, "_400x400.$1"] as const;
+    const icon = data.user.legacy.profileImageUrlHttps.replace(...reg);
     const note = data.tweet.noteTweet?.noteTweetResults.result;
     const legacy = data.tweet.legacy!;
     const text = note?.text ?? legacy.fullText;
@@ -43,7 +51,8 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
           style={{
             width: this.width * 0.5,
             height: this.width * 0.5,
-            maskImage: "linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))",
+            maskImage:
+              "linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))",
           }}
           src={icon}
         />
@@ -59,10 +68,10 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
             }}
           >
             {this.tweetRender({ data })}
-            <p style={{ padding: "14px", margin: "0" }}></p>
+            <p style={{ padding: this.applyScale(14), margin: "0" }}></p>
             <p
               style={{
-                fontSize: "14px",
+                fontSize: this.applyScale(14),
                 color: "#ffffff",
                 margin: "0",
                 ...this.textAlign(),
@@ -72,7 +81,7 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
             </p>
             <p
               style={{
-                fontSize: "14px",
+                fontSize: this.applyScale(14),
                 color: "#888888",
                 margin: "0",
                 ...this.textAlign(),
@@ -134,7 +143,7 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
               key={i}
               style={{
                 display: "flex",
-                fontSize: "20px",
+                fontSize: this.applyScale(20),
                 color: "#ffffff",
                 margin: "0",
                 ...(n ? { width: "100%" } : {}),

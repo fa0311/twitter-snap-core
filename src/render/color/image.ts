@@ -2,6 +2,7 @@ import { RenderBasicImage, RenderBasicImageParam } from "../basic/image";
 
 export type RenderColorImageParam = {
   width: number;
+  scale?: number;
   video?: boolean;
 };
 

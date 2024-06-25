@@ -3,7 +3,12 @@ import { TweetRenderImage } from "../../../render/base/image";
 import { imageThemeList, ImageThemeNameType } from "../../key";
 
 const themeList = Object.entries(imageThemeList).map(([k, e]) => {
-  return [k, new e({ width: 650, video: false })] as const;
+  const cls = new e({
+    width: 650,
+    scale: 1,
+    video: false,
+  });
+  return [k, cls] as const;
 });
 
 const guest = new TwitterOpenApi().getGuestClient();
@@ -29,7 +34,7 @@ export const TwitterJSX = async ({ tweetId, theme }: Props) => {
   return (
     <div
       style={{
-        width: "650px",
+        width: 650,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

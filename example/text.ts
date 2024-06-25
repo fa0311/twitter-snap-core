@@ -26,14 +26,15 @@ const tweetIdList = [
       tweetId: tweetId,
     });
     const render = new RenderOceanBlueColor({
-      width: 600,
+      width: 1200,
+      scale: 2,
     });
     const element = render.imageRender({
       data: tweet.data!,
     });
 
     const img = new ImageResponse(element, {
-      width: 600,
+      width: 1200,
       height: undefined,
       fonts: [
         {
