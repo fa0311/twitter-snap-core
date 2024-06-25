@@ -18,6 +18,7 @@ export const getResizedMediaByWidth = (
   aspectRatioHeight: number,
   width: number
 ) => {
-  const height = (width * aspectRatioHeight) / aspectRatioWidth;
-  return { width: width, height: Math.floor(height / 2) * 2 };
+  const h = (width * aspectRatioHeight) / aspectRatioWidth;
+  const height = Math.floor(h / 2) * 2;
+  return { width, height };
 };

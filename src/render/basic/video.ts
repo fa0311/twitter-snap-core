@@ -131,8 +131,8 @@ export class RenderBasicVideo extends TweetRenderVideo {
     command.input(image);
     tempVideo.forEach((input) => command.input(input));
 
-    const normalize = `scale=trunc(ih*dar/2)*2:trunc(ih/2)*2,setsar=1/1`;
-    const pad = `scale=w=${width}:h=${height}:force_original_aspect_ratio=1,pad=w=${width}:h=${height}:x=(ow-iw)/2:y=(oh-ih)/2:color=white`;
+    const normalize = `setsar=1/1`;
+    const pad = `scale=w=${width}:h=${height}:force_original_aspect_ratio=1,pad=w=${width}:h=${height}:x=trunc((ow-iw)/4)*2:y=trunc((oh-ih)/4)*2:color=white`;
     command.complexFilter(
       [
         `[0]scale=trunc(iw/2)*2:trunc(ih/2)*2[i]`,
