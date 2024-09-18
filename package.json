@@ -20,9 +20,6 @@
     "start": "node dist/cli.js",
     "build": "npx tsc -p tsconfig.build.json"
   },
-  "bin": {
-    "twitter-snap": "dist/cli.js"
-  },
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "dependencies": {
