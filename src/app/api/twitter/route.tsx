@@ -1,3 +1,4 @@
+import { imageResponse } from "app/utils";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
 import { TweetRenderImage } from "../../../render/base/image";
 import { imageThemeList, ImageThemeNameType } from "../../key";
@@ -31,16 +32,30 @@ export const TwitterJSX = async ({ tweetId, theme }: Props) => {
   if (tweet.data === undefined) {
     return <div>tweet.data is undefined</div>;
   }
+
+  const element = render.render({
+    data: tweet.data!,
+  });
+  const img = await imageResponse(element, 650);
+  const png = Buffer.from(await img.arrayBuffer());
+
   return (
-    <div
-      style={{
-        width: 650,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <render.render data={tweet.data} />
+    <div>
+      <div
+        style={{
+          width: 650,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {element}
+      </div>
+
+      <img
+        style={{ width: 650 }}
+        src={`data:image/png;base64,${png.toString("base64")}`}
+      />
     </div>
   );
 };

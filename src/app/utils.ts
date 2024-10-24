@@ -1,3 +1,4 @@
+import { ImageResponse } from "@vercel/og";
 import { promises as fs } from "fs";
 
 type ResType = {
@@ -17,6 +18,81 @@ type ResType = {
   meiryo700: ArrayBuffer;
   meiryo500i: ArrayBuffer;
   meiryo700i: ArrayBuffer;
+};
+
+export const imageResponse = async (
+  element: React.ReactElement,
+  width: number = 1200
+) => {
+  const {
+    segoeui400i,
+    segoeui400,
+    segoeui700i,
+    segoeui700,
+    meiryo500,
+    meiryo700,
+    meiryo500i,
+    meiryo700i,
+  } = await getFont();
+  return new ImageResponse(element, {
+    width: width,
+    height: undefined,
+    headers: {
+      "accept-encoding": "identity",
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+    },
+    fonts: [
+      {
+        data: segoeui400i,
+        name: "Segoe UI",
+        weight: 500,
+        style: "italic",
+      },
+      {
+        data: segoeui400,
+        name: "Segoe UI",
+        weight: 500,
+        style: "normal",
+      },
+      {
+        data: segoeui700i,
+        name: "Segoe UI",
+        weight: 700,
+        style: "italic",
+      },
+      {
+        data: segoeui700,
+        name: "Segoe UI",
+        weight: 700,
+        style: "normal",
+      },
+      {
+        data: meiryo500,
+        name: "Meiryo",
+        weight: 500,
+        style: "normal",
+      },
+      {
+        data: meiryo700,
+        name: "Meiryo",
+        weight: 700,
+        style: "normal",
+      },
+      {
+        data: meiryo500i,
+        name: "Meiryo",
+        weight: 500,
+        style: "italic",
+      },
+      {
+        data: meiryo700i,
+        name: "Meiryo",
+        weight: 700,
+        style: "italic",
+      },
+    ],
+  });
 };
 
 export const getFont = async (): Promise<ResType> => {
@@ -52,10 +128,9 @@ export const getFont = async (): Promise<ResType> => {
       const url = `${base}${file}`;
       const res = await fetch(url);
       const buffer = await res.arrayBuffer();
-      await fs.writeFile(path, Buffer.from(buffer));
+      await fs.writeFile(path, new Uint8Array(buffer));
       return [`${name}${weight}${suffix}`, buffer] as const;
     }
   });
-
   return Object.fromEntries(await Promise.all(fonts)) as ResType;
 };

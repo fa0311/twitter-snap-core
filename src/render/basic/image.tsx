@@ -2,6 +2,9 @@ import split from "graphemesplit";
 import React from "react";
 import {
   NoteTweetResultRichTextTagRichtextTypesEnum as RichtextTypesEnum,
+  TypeName,
+  User,
+  UserUnion,
   type UserProfileImageShapeEnum,
 } from "twitter-openapi-typescript-generated";
 import { type TweetRenderMerge } from "../../render/base/base";
@@ -135,6 +138,12 @@ export class RenderBasicImage extends TweetRenderImage {
     }
   };
 
+  userOrNullConverter = (userResults: UserUnion): User | undefined => {
+    if (userResults.typename == TypeName.User) {
+      return userResults as User;
+    }
+  };
+
   textOverFlowCSS: (props: { lineClamp: number }) => React.CSSProperties = ({
     lineClamp,
   }) => {
@@ -155,6 +164,17 @@ export class RenderBasicImage extends TweetRenderImage {
     } else {
       return (num / 1000000).toFixed(1) + "M";
     }
+  };
+
+  toOriginal = (url: URL): URL => {
+    const params = {
+      format: "jpg",
+      name: "4096x4096", // orig
+    };
+    Object.entries(params).forEach(([key, value]) => {
+      url.searchParams.set(key, value);
+    });
+    return url;
   };
 
   htmlParse: (text: string) => string = (text) => {
@@ -189,6 +209,7 @@ export class RenderBasicImage extends TweetRenderImage {
         >
           <this.userRender data={data} />
           {data.tweet.card && <this.ogp data={data} />}
+
           <this.bottonWidget data={data} />
         </div>
       </div>
@@ -213,23 +234,47 @@ export class RenderBasicImage extends TweetRenderImage {
     const font = this.applyScale(15);
 
     return (
-      <p
+      <div
         style={{
           display: "flex",
-          margin: this.applyScale(0),
+          flexDirection: "row",
           gap: this.applyScale(2),
         }}
       >
-        <span style={{ color: this.subTextColor, fontSize: font }}>
-          {timeString}
-        </span>
-        <span style={{ color: this.subTextColor, fontSize: font }}>·</span>
-        <span style={{ color: this.subTextColor, fontSize: font }}>
-          {dateString}
-        </span>
+        <p
+          style={{
+            display: "flex",
+            margin: this.applyScale(0),
+            gap: this.applyScale(2),
+          }}
+        >
+          <span style={{ color: this.subTextColor, fontSize: font }}>
+            {timeString}
+          </span>
+          <span style={{ color: this.subTextColor, fontSize: font }}>·</span>
+          <span style={{ color: this.subTextColor, fontSize: font }}>
+            {dateString}
+          </span>
+        </p>
         {view && (
-          <>
+          <p
+            style={{
+              display: "flex",
+              margin: this.applyScale(0),
+              gap: this.applyScale(2),
+            }}
+          >
             <span style={{ color: this.subTextColor, fontSize: font }}>·</span>
+          </p>
+        )}
+        {view && (
+          <p
+            style={{
+              display: "flex",
+              margin: this.applyScale(0),
+              gap: this.applyScale(4),
+            }}
+          >
             <span
               style={{
                 color: this.textColor,
@@ -239,13 +284,12 @@ export class RenderBasicImage extends TweetRenderImage {
             >
               {this.toKMB(Number(view))}
             </span>
-            <span style={{ color: this.subTextColor, fontSize: font }}></span>
             <span style={{ color: this.subTextColor, fontSize: font }}>
               Views
             </span>
-          </>
+          </p>
         )}
-      </p>
+      </div>
     );
   };
 
@@ -270,6 +314,12 @@ export class RenderBasicImage extends TweetRenderImage {
     )?.value.stringValue;
     const description = data.tweet.card?.legacy?.bindingValues.find(
       (v) => v.key === "description"
+    )?.value.stringValue;
+    const unifiedCard = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "unified_card"
+    )?.value.stringValue;
+    const cardUrl = data.tweet.card?.legacy?.bindingValues.find(
+      (v) => v.key === "card_url"
     )?.value.stringValue;
 
     // data.tweet.card?.legacy?.bindingValues.forEach((v) => {
@@ -324,6 +374,60 @@ export class RenderBasicImage extends TweetRenderImage {
       );
     }
 
+    if (unifiedCard) {
+      const unifiedCardData = JSON.parse(unifiedCard!);
+      const titleData: any = Object.values(
+        unifiedCardData.component_objects
+      ).find((e: any) => e.type == "details");
+      const imgData: any = Object.values(unifiedCardData.media_entities)[0]; // MediaExtended
+
+      return (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ width: "100%", display: "flex", position: "relative" }}>
+            <img
+              style={{
+                width: "100%",
+                borderRadius: this.applyScale(10),
+                border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
+              }}
+              src={imgData.media_url_https}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: this.applyScale(12),
+                left: this.applyScale(12),
+                right: this.applyScale(12),
+                display: "flex",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: this.applyScale(13),
+                  padding: this.applyScales([0, 4]),
+                  background: "#000000c4",
+                  color: "#ffffff",
+                  borderRadius: this.applyScale(4),
+                  ...this.textOverFlowCSS({ lineClamp: 1 }),
+                }}
+              >
+                {titleData.data.title.content}
+              </p>
+            </div>
+          </div>
+          <p
+            style={{
+              fontSize: this.applyScale(13),
+              margin: this.applyScale(0),
+              color: this.subTextColor,
+            }}
+          >
+            From {titleData.data.subtitle.content}
+          </p>
+        </div>
+      );
+    }
+
     const size = 129;
     const url = player?.url ?? thumbnail?.url;
 
@@ -336,7 +440,7 @@ export class RenderBasicImage extends TweetRenderImage {
               height: this.applyScale(size),
               borderRadius: this.applyScales([10, 0, 0, 10]),
               objectFit: "cover",
-              borderRight: `${this.applyScale(1)}  solid ${this.borderColor}`,
+              borderRight: `${this.applyScale(1)} solid ${this.borderColor}`,
             }}
             src={url}
           />
@@ -372,6 +476,7 @@ export class RenderBasicImage extends TweetRenderImage {
         style={{
           display: "flex",
           flexDirection: "row",
+          overflow: "hidden",
           borderRadius: this.applyScale(10),
           border: `${this.applyScale(1)} solid ${this.borderColor}`,
         }}
@@ -463,7 +568,7 @@ export class RenderBasicImage extends TweetRenderImage {
   };
 
   userRender: TweetImageRenderType = ({ data }) => {
-    const reg = [/_[a-z]+\.([a-z]+)$/, "_400x400.$1"] as const;
+    const reg = [/_[a-z]+\.([a-z]+)$/, ".$1"] as const;
     const icon = data.user.legacy.profileImageUrlHttps.replace(...reg);
 
     const name = data.user.legacy.name;
@@ -663,6 +768,7 @@ export class RenderBasicImage extends TweetRenderImage {
         mediaUrlHttps,
       })
     );
+
     const normalizeNoteMedia = [...(noteEntity?.media ?? [])].map(
       ({ indices, idStr, mediaUrlHttps, type }) => ({
         start: normalizeMap.findIndex(({ array }) => array === indices[0]),
@@ -725,7 +831,7 @@ export class RenderBasicImage extends TweetRenderImage {
                 borderRadius: this.applyScale(10),
                 border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
               }}
-              src={m.mediaUrlHttps}
+              src={this.toOriginal(new URL(m.mediaUrlHttps)).toString()}
             />
           ),
         });
@@ -741,7 +847,7 @@ export class RenderBasicImage extends TweetRenderImage {
                 borderRadius: this.applyScale(10),
                 border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
               }}
-              src={m.mediaUrlHttps}
+              src={this.toOriginal(new URL(m.mediaUrlHttps)).toString()}
             />
           ),
         });
@@ -761,9 +867,9 @@ export class RenderBasicImage extends TweetRenderImage {
                 width: "100%",
                 borderRadius: this.applyScale(10),
                 border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
-                marginTop: this.applyScale(12),
+                marginTop: this.applyScale(8),
               }}
-              src={m.mediaUrlHttps}
+              src={this.toOriginal(new URL(m.mediaUrlHttps)).toString()}
             />
           ),
         });
@@ -963,6 +1069,12 @@ export class RenderBasicImage extends TweetRenderImage {
     //     insert.filter(({ index }) => index > last.end).forEach(({ fn }) => textElement.push(fn()));
     // }
 
+    const mediaSource = [...(extEntities?.media ?? [])]
+      .map((e) => e.additionalMediaInfo?.sourceUser?.userResults.result)
+      .filter((e): e is NonNullable<typeof e> => e != undefined)
+      .map((user) => this.userOrNullConverter(user))
+      .filter((e): e is NonNullable<typeof e> => e != undefined);
+
     return (
       <div
         style={{
@@ -970,9 +1082,38 @@ export class RenderBasicImage extends TweetRenderImage {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          gap: this.applyScale(4),
         }}
       >
         {textElement}
+        {mediaSource.length == 0 ? null : (
+          <p
+            style={{
+              display: "flex",
+              width: "100%",
+              margin: this.applyScale(0),
+              gap: this.applyScale(2),
+            }}
+          >
+            <span
+              style={{
+                color: this.subTextColor,
+                fontSize: this.applyScale(15),
+              }}
+            >
+              From
+            </span>
+            <span
+              style={{
+                color: this.textColor,
+                fontSize: this.applyScale(15),
+                fontWeight: "700",
+              }}
+            >
+              {mediaSource.map((user) => user.legacy.name).join(", ")}
+            </span>
+          </p>
+        )}
       </div>
     );
   };

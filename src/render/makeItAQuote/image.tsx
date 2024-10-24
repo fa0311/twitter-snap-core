@@ -30,7 +30,7 @@ export class RenderMakeItAQuoteImage extends TweetRenderImage {
   };
 
   render: TweetImageRenderType = ({ data }) => {
-    const reg = [/_[a-z]+\.([a-z]+)$/, "_400x400.$1"] as const;
+    const reg = [/_[a-z]+\.([a-z]+)$/, ".$1"] as const;
     const icon = data.user.legacy.profileImageUrlHttps.replace(...reg);
     const note = data.tweet.noteTweet?.noteTweetResults.result;
     const legacy = data.tweet.legacy!;

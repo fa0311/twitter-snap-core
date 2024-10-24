@@ -1,8 +1,7 @@
-import { ImageResponse } from "@vercel/og";
 import fs from "fs/promises";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
+import { imageResponse } from "../src/app/utils";
 import { RenderColorBase } from "../src/render/color/color";
-import { getFont } from "./utils";
 
 const matrix = (() => {
   return [
@@ -27,17 +26,6 @@ const matrix = (() => {
 const tweetId = "1772311389857571157";
 
 (async () => {
-  const {
-    segoeui400i,
-    segoeui400,
-    segoeui700i,
-    segoeui700,
-    meiryo500,
-    meiryo700,
-    meiryo500i,
-    meiryo700i,
-  } = await getFont();
-
   const res = matrix.map(async (matrix, i) => {
     const client = await new TwitterOpenApi().getGuestClient();
 
@@ -46,7 +34,7 @@ const tweetId = "1772311389857571157";
       tweetId: tweetId,
     });
     const render = new RenderColorBase({
-      width: 600,
+      width: 720,
       gradient: matrix[0],
       shadow: matrix[1],
       dark: matrix[2],
@@ -55,60 +43,7 @@ const tweetId = "1772311389857571157";
       data: tweet.data!,
     });
 
-    const img = new ImageResponse(element, {
-      width: 600,
-      height: undefined,
-      fonts: [
-        {
-          data: segoeui400i,
-          name: "Segoe UI",
-          weight: 500,
-          style: "italic",
-        },
-        {
-          data: segoeui400,
-          name: "Segoe UI",
-          weight: 500,
-          style: "normal",
-        },
-        {
-          data: segoeui700i,
-          name: "Segoe UI",
-          weight: 700,
-          style: "italic",
-        },
-        {
-          data: segoeui700,
-          name: "Segoe UI",
-          weight: 700,
-          style: "normal",
-        },
-        {
-          data: meiryo500,
-          name: "Meiryo",
-          weight: 500,
-          style: "normal",
-        },
-        {
-          data: meiryo700,
-          name: "Meiryo",
-          weight: 700,
-          style: "normal",
-        },
-        {
-          data: meiryo500i,
-          name: "Meiryo",
-          weight: 500,
-          style: "italic",
-        },
-        {
-          data: meiryo700i,
-          name: "Meiryo",
-          weight: 700,
-          style: "italic",
-        },
-      ],
-    });
+    const img = await imageResponse(element, 720);
     const png = Buffer.from(await img.arrayBuffer());
     await fs.mkdir("temp/theme", { recursive: true });
     await fs.writeFile(`temp/theme/${i}-${tweetId}.png`, png);

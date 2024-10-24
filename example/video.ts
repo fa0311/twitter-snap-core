@@ -1,8 +1,7 @@
-import { ImageResponse } from "@vercel/og";
 import { promises as fs } from "fs";
 import { TwitterOpenApi } from "twitter-openapi-typescript";
+import { getFont, imageResponse } from "../src/app/utils";
 import { RenderOceanBlueColor } from "../src/render/color/color";
-import { getFont } from "./utils";
 
 const tweetIdList = [
   "1722118869178081318",
@@ -27,43 +26,14 @@ const res = tweetIdList.map(async (tweetId) => {
   const element = render.imageRender({
     data: tweet.data!,
   });
-  const img = new ImageResponse(element, {
-    width: 1200,
-    height: undefined,
-    fonts: [
-      {
-        data: segoeui400i,
-        name: "segoeui",
-        weight: 500,
-        style: "italic",
-      },
-      {
-        data: segoeui400,
-        name: "segoeui",
-        weight: 500,
-        style: "normal",
-      },
-      {
-        data: segoeui700i,
-        name: "segoeui",
-        weight: 700,
-        style: "italic",
-      },
-      {
-        data: segoeui700,
-        name: "segoeui",
-        weight: 700,
-        style: "normal",
-      },
-    ],
-  });
+  const img = await imageResponse(element);
 
   const png = Buffer.from(await img.arrayBuffer());
-  await fs.writeFile(`temp/${tweetId}.png`, png);
+  await fs.writeFile(`temp/temp-${tweetId}.png`, png);
 
   const res = await render.videoRender!({
     data: tweet.data!,
-    image: `temp/${tweetId}.png`,
+    image: `temp/temp-${tweetId}.png`,
     output: `temp/${tweetId}.mp4`,
   });
 
