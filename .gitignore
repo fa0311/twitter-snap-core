@@ -4,3 +4,5 @@ temp/*
 fonts/*
 cookies.txt
 /dist
+
+!.gitkeep
