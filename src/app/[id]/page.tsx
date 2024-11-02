@@ -14,6 +14,7 @@ export default function Twitter({ params, searchParams }: Props) {
 
   const param: SearchParams = {
     theme: searchParams.theme ?? "RenderOceanBlueColorImage",
+    img: `${searchParams.img}` === "true",
   };
 
   return (

@@ -3,15 +3,13 @@ import { TwitterOpenApi } from "twitter-openapi-typescript";
 import { imageResponse } from "../src/app/utils";
 import { RenderColorBase } from "../src/render/color/color";
 
-const matrix = (() => {
-  return [
-    ["linear-gradient(-45deg, #1180f3 0%, #2ca7f3 50%, #58ffe4 100%)"] as const,
-    ["linear-gradient(135deg, #ffced6 0%, #ffdeba 50%, #b5f4b5 100%)"] as const,
-    ["linear-gradient(45deg, #ffd5dc 0%, #aa55aa 100%)"] as const,
-    ["linear-gradient(90deg, #ff5555 0%, #ffc355 100%)"] as const,
-    ["linear-gradient(-45deg, #1180f3 0%, #cb8bec 100%)"] as const,
-  ];
-})()
+const matrix = [
+  ["linear-gradient(-45deg, #1180f3 0%, #2ca7f3 50%, #58ffe4 100%)"] as const,
+  ["linear-gradient(135deg, #ffced6 0%, #ffdeba 50%, #b5f4b5 100%)"] as const,
+  ["linear-gradient(45deg, #ffd5dc 0%, #aa55aa 100%)"] as const,
+  ["linear-gradient(90deg, #ff5555 0%, #ffc355 100%)"] as const,
+  ["linear-gradient(-45deg, #1180f3 0%, #cb8bec 100%)"] as const,
+]
   .flatMap((c) => {
     return [
       [...c, "none"] as const,

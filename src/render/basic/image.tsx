@@ -111,6 +111,25 @@ export class RenderBasicImage extends TweetRenderImage {
     return `${this.rawAssetsUrl}/twitter/card${this.cardSuffix}.png`;
   };
 
+  removeUnsupportChar = (text: string): string => {
+    return text
+      .split("")
+      .map((c) => {
+        const code = c.codePointAt(0)!;
+        if (code >= 0x0600 && code <= 0x06ff) {
+          return "";
+        }
+        if (code >= 0x0750 && code <= 0x077f) {
+          return "";
+        }
+        if (code >= 0x08a0 && code <= 0x08ff) {
+          return "";
+        }
+        return c;
+      })
+      .join("");
+  };
+
   getIconShapeWidget: (props: {
     type: UserProfileImageShapeEnum;
   }) => React.CSSProperties = ({ type }) => {
@@ -411,7 +430,7 @@ export class RenderBasicImage extends TweetRenderImage {
                   ...this.textOverFlowCSS({ lineClamp: 1 }),
                 }}
               >
-                {titleData.data.title.content}
+                {this.removeUnsupportChar(titleData.data.title.content)}
               </p>
             </div>
           </div>
@@ -422,7 +441,7 @@ export class RenderBasicImage extends TweetRenderImage {
               color: this.subTextColor,
             }}
           >
-            From {titleData.data.subtitle.content}
+            From {this.removeUnsupportChar(titleData.data.subtitle.content)}
           </p>
         </div>
       );
@@ -513,7 +532,7 @@ export class RenderBasicImage extends TweetRenderImage {
               ...this.textOverFlowCSS({ lineClamp: 1 }),
             }}
           >
-            {title}
+            {title && this.removeUnsupportChar(title)}
           </p>
           <p
             style={{
@@ -523,7 +542,7 @@ export class RenderBasicImage extends TweetRenderImage {
               ...this.textOverFlowCSS({ lineClamp: 2 }),
             }}
           >
-            {description}
+            {description && this.removeUnsupportChar(description)}
           </p>
         </div>
       </div>
@@ -548,7 +567,7 @@ export class RenderBasicImage extends TweetRenderImage {
             color: this.textColor,
           }}
         >
-          {name}
+          {this.removeUnsupportChar(name)}
         </p>
         {(data.user.isBlueVerified || data.user.legacy.verified) &&
           this.getBadgeWidget({ data })}
@@ -570,8 +589,6 @@ export class RenderBasicImage extends TweetRenderImage {
   userRender: TweetImageRenderType = ({ data }) => {
     const reg = [/_[a-z]+\.([a-z]+)$/, ".$1"] as const;
     const icon = data.user.legacy.profileImageUrlHttps.replace(...reg);
-
-    const name = data.user.legacy.name;
     const id = data.user.legacy.screenName;
 
     const legacy = data.tweet.legacy!;
@@ -1047,7 +1064,7 @@ export class RenderBasicImage extends TweetRenderImage {
                       ...properties,
                     }}
                   >
-                    {char}
+                    {this.removeUnsupportChar(char)}
                   </span>
                 ))}
               </span>
