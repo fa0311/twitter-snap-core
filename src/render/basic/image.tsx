@@ -569,7 +569,9 @@ export class RenderBasicImage extends TweetRenderImage {
         >
           {this.removeUnsupportChar(name)}
         </p>
-        {(data.user.isBlueVerified || data.user.legacy.verified) &&
+        {(data.user.isBlueVerified ||
+          data.user.legacy.verified ||
+          data.user.professional) &&
           this.getBadgeWidget({ data })}
         {label && (
           <img
