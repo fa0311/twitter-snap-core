@@ -395,56 +395,154 @@ export class RenderBasicImage extends TweetRenderImage {
 
     if (unifiedCard) {
       const unifiedCardData = JSON.parse(unifiedCard!);
-      const titleData: any = Object.values(
+      const detailsData: any = Object.values(
         unifiedCardData.component_objects
       ).find((e: any) => e.type == "details");
-      const imgData: any = Object.values(unifiedCardData.media_entities)[0]; // MediaExtended
+      const grokData: any = Object.values(
+        unifiedCardData.component_objects
+      ).find((e: any) => e.type == "grok_share");
 
-      return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ width: "100%", display: "flex", position: "relative" }}>
-            <img
+      if (detailsData) {
+        const imgData: any = Object.values(unifiedCardData.media_entities)[0]; // MediaExtended
+
+        return (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div
+              style={{ width: "100%", display: "flex", position: "relative" }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  borderRadius: this.applyScale(10),
+                  border: `${this.applyScale(1)} solid ${
+                    this.imageBorderColor
+                  }`,
+                }}
+                src={imgData.media_url_https}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: this.applyScale(12),
+                  left: this.applyScale(12),
+                  right: this.applyScale(12),
+                  display: "flex",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: this.applyScale(13),
+                    padding: this.applyScales([0, 4]),
+                    background: "#000000c4",
+                    color: "#ffffff",
+                    borderRadius: this.applyScale(4),
+                    ...this.textOverFlowCSS({ lineClamp: 1 }),
+                  }}
+                >
+                  {this.removeUnsupportChar(detailsData.data.title.content)}
+                </p>
+              </div>
+            </div>
+            <p
+              style={{
+                fontSize: this.applyScale(13),
+                margin: this.applyScale(0),
+                color: this.subTextColor,
+              }}
+            >
+              From {this.removeUnsupportChar(detailsData.data.subtitle.content)}
+            </p>
+          </div>
+        );
+      } else if (grokData) {
+        const ask = grokData.data.conversation_preview[0].message;
+        const answer = grokData.data.conversation_preview[1].message;
+        const answerUrl = grokData.data.conversation_preview[1].mediaUrls[0];
+        return (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div
               style={{
                 width: "100%",
+                display: "flex",
+                position: "relative",
+                flexDirection: "column",
                 borderRadius: this.applyScale(10),
                 border: `${this.applyScale(1)} solid ${this.imageBorderColor}`,
               }}
-              src={imgData.media_url_https}
-            />
-            <div
-              style={{
-                position: "absolute",
-                bottom: this.applyScale(12),
-                left: this.applyScale(12),
-                right: this.applyScale(12),
-                display: "flex",
-              }}
             >
-              <p
-                style={{
-                  fontSize: this.applyScale(13),
-                  padding: this.applyScales([0, 4]),
-                  background: "#000000c4",
-                  color: "#ffffff",
-                  borderRadius: this.applyScale(4),
-                  ...this.textOverFlowCSS({ lineClamp: 1 }),
-                }}
-              >
-                {this.removeUnsupportChar(titleData.data.title.content)}
-              </p>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: this.applyScale(16),
+                    background: this.subBackgroundColor,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: this.applyScale(17),
+                      margin: this.applyScale(0),
+                      color: this.textColor,
+                      fontWeight: "700",
+                      ...this.textOverFlowCSS({ lineClamp: 2 }),
+                    }}
+                  >
+                    {this.removeUnsupportChar(ask)}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: this.applyScale(13),
+                      margin: this.applyScale(0),
+                      color: this.subTextColor,
+                    }}
+                  >
+                    {answerUrl ? "Image by Grok" : "Answer by Grok"}
+                  </p>
+                </div>
+                {answerUrl && (
+                  <img
+                    style={{
+                      width: "100%",
+                      borderRadius: this.applyScales([0, 0, 10, 10]),
+                    }}
+                    src={answerUrl}
+                  />
+                )}
+                {!answerUrl && (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      padding: this.applyScale(16),
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: this.applyScale(15),
+                        margin: this.applyScale(0),
+                        color: this.textColor,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      {this.removeUnsupportChar(answer)
+                        .split("\n")
+                        .map((e) => (
+                          <p style={{ margin: this.applyScale(0) }}>
+                            {this.removeUnsupportChar(e)}
+                          </p>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-          <p
-            style={{
-              fontSize: this.applyScale(13),
-              margin: this.applyScale(0),
-              color: this.subTextColor,
-            }}
-          >
-            From {this.removeUnsupportChar(titleData.data.subtitle.content)}
-          </p>
-        </div>
-      );
+        );
+      } else {
+        throw new Error("unifiedCardData is not found");
+      }
     }
 
     const size = 129;
